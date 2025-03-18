@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
     <string name="app_name" translatable="false">tiqr</string>
     <string name="app_url" translatable="false">https://tiqr.org</string>
+    <string name="bottom_menu_company_url" translatable="false">https://surf.nl</string>
 
     <!-- General buttons -->
     <string name="button_ok">OK</string>
