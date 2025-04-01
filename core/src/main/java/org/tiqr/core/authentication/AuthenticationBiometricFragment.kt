@@ -130,14 +130,9 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
                     }
                 }
                 is AuthenticationBiometricComponent.BiometricResult.Fail -> {
-                    binding.progress.hide()
-                    viewModel.challenge.value?.let { challenge ->
-                        findNavController().navigate(
-                            AuthenticationBiometricFragmentDirections.actionPin(
-                                challenge
-                            )
-                        )
-                    }
+                    // This is not necessarily a failure, since the prompt might be still showing.
+                    // This just means that an authentication attempt was not successful, like a finger or face could not be read, but the user might try again.
+                    // So here we don't do anything, but look for the error instead.
                 }
             }
         }.run {
