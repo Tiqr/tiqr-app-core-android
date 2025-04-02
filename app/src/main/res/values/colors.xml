@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primaryColor">#0002e4</color>
-    <color name="primaryTextColor">#ffffff</color>
+    <color name="primaryTextColor">#000000</color>
     <color name="scanColor">#ffffff</color>
     <color name="basicColor">#000000</color>
 

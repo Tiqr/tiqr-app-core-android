@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        android:background="@color/primaryColor"
         tools:theme="@style/AppTheme">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -43,6 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:defaultNavHost="true"
+            android:background="@color/background"
             app:layout_constraintBottom_toTopOf="@id/bottombar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
