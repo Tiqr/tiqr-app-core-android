@@ -94,9 +94,9 @@ a
     <string name="auth_pin_title">Enter your PIN for tiqr</string>
 
     <!-- Authentication (Fallback) -->
-    <string name="auth_fallback_title">You appear to be offline</string>
-    <string name="auth_fallback_subtitle">Don\'t worry! Click the QR code on the website. You will be asked to enter the following one-time credentials:</string>
-    <string name="auth_fallback_id">Your ID is:</string>
+    <string name="auth_fallback_title">Your device seems to be offline</string>
+    <string name="auth_fallback_subtitle">Fortunately, you can log in another way:\n\n\t1. Press ‘Enter code’ below in the QR code on your computer.\n\t2. Enter this code:</string>
+    <string name="auth_fallback_id">Your ID:</string>
     <string name="auth_fallback_otp">One-time password:</string>
     <string name="auth_fallback_pin_unverified_title">Note: your PIN has not been verified yet.</string>
     <string name="auth_fallback_pin_unverified">If you can\'t login with the credentials above, scan again and enter the correct PIN code.</string>

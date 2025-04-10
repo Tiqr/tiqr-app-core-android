@@ -39,10 +39,10 @@
             android:id="@+id/table"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:orientation="vertical"
-            app:constraint_referenced_ids="label_id, id, label_otp, otp"
+            app:constraint_referenced_ids="otp, label_id, id"
             app:flow_verticalGap="4dp"
             app:flow_verticalStyle="packed"
             app:flow_wrapMode="chain"
@@ -53,6 +53,19 @@
             app:layout_constraintTop_toBottomOf="@id/subtitle"
             app:layout_constraintVertical_bias="0"
             tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/AppTheme.TextAppearance.Title"
+            android:gravity="center"
+            android:textSize="36sp"
+            android:text="@{viewModel.otp.value}"
+            android:letterSpacing="0.1"
+            android:paddingBottom="24dp"
+            tools:ignore="MissingConstraints"
+            tools:text="&lt;otp&gt;" />
 
         <TextView
             android:id="@+id/label_id"
@@ -76,22 +89,6 @@
             app:hideIf="@{viewModel.challenge.stepUpChallenge}"
             tools:ignore="MissingConstraints,UnusedAttribute"
             tools:text="&lt;identity&gt;" />
-
-        <TextView
-            android:id="@+id/label_otp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/auth_fallback_otp"
-            android:textAppearance="@style/AppTheme.TextAppearance.Label"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/otp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.otp.value}"
-            tools:ignore="MissingConstraints"
-            tools:text="&lt;otp&gt;" />
 
         <TextView
             android:id="@+id/unverified_title"
