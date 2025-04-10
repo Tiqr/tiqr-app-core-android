@@ -87,9 +87,9 @@
     <string name="auth_pin_title">Voer je PIN voor tiqr in</string>
 
     <!-- Authentication (Fallback) -->
-    <string name="auth_fallback_title">Je lijkt offline te zijn</string>
-    <string name="auth_fallback_subtitle">Geen paniek! Klik op de QR code op de website. Je zult gevraagd worden om de volgende eenmalige gegevens in te geven:</string>
-    <string name="auth_fallback_id">Je gebruikers ID is:</string>
+    <string name="auth_fallback_title">Je apparaat lijkt offline te zijn</string>
+    <string name="auth_fallback_subtitle">Gelukkig kan je ook op een andere manier inloggen:\n\n\t1. Druk op ‘Code invoeren’ onder de QR-code op je computer.\n\t2. Voer daarna deze code in:\n</string>
+    <string name="auth_fallback_id">Je ID:</string>
     <string name="auth_fallback_otp">Eénmalig wachtwoord:</string>
     <string name="auth_fallback_pin_unverified_title">Opmerking: Je PIN is nog niet geverifieerd.</string>
     <string name="auth_fallback_pin_unverified">Als je niet kunt inloggen met bovenstaande gegevens, scan dan opnieuw en geef de correcte PIN code in.</string>
