@@ -75,10 +75,10 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
     override val layout = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
-
         navController = getNavController(R.id.nav_host_fragment).apply {
             setSupportActionBar(binding.toolbar)
             setupActionBarWithNavController(
@@ -239,7 +239,7 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
         return try {
             FirebaseMessaging.getInstance().token.await()
         } catch (ex: Exception) {
-            Timber.w("Unable to get last known device token from Firebase Messaging.", ex)
+            Timber.w(ex, "Unable to get last known device token from Firebase Messaging.")
             null
         }
     }

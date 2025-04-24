@@ -34,6 +34,7 @@ import android.view.View
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,12 +84,20 @@ class ScanFragment : BaseFragment<FragmentScanBinding>() {
             is ChallengeParseResult.Success -> {
                 viewLifecycleOwner.lifecycleScope.launchWhenResumed {
                     delay(200L) // delay a bit, otherwise beep sound is cutoff
+                    val navController: NavController
+                    try {
+                        navController = findNavController()
+                    } catch (ex: IllegalStateException) {
+                        // The application was already closed. We do nothing
+                        Timber.i(ex, "Application closed while waiting, ignoring.")
+                        return@launchWhenResumed
+                    }
                     when (result.value) {
-                        is EnrollmentChallenge -> findNavController().navigate(
+                        is EnrollmentChallenge -> navController.navigate(
                             ScanFragmentDirections.actionEnroll(result.value as EnrollmentChallenge)
                         )
 
-                        is AuthenticationChallenge -> findNavController().navigate(
+                        is AuthenticationChallenge -> navController.navigate(
                             ScanFragmentDirections.actionAuthenticate(result.value as AuthenticationChallenge)
                         )
                     }
