@@ -44,6 +44,7 @@ import org.tiqr.data.model.ChallengeCompleteResult
 import org.tiqr.data.model.EnrollmentCompleteFailure
 import org.tiqr.data.util.extension.biometricUsable
 import org.tiqr.data.viewmodel.EnrollmentViewModel
+import timber.log.Timber
 
 /**
  * Fragment to confirm the PIN for the enrollment
@@ -81,11 +82,16 @@ class EnrollmentPinVerifyFragment : BaseFragment<FragmentEnrollmentPinVerifyBind
                 ChallengeCompleteResult.Success -> {
                     showBiometricUpgrade {
                         viewModel.challenge.value?.let {
-                            findNavController().navigate(
-                                EnrollmentPinVerifyFragmentDirections.actionSummary(
-                                    it
+                            try {
+                                findNavController().navigate(
+                                    EnrollmentPinVerifyFragmentDirections.actionSummary(
+                                        it
+                                    )
                                 )
-                            )
+                            } catch (ex: IllegalStateException) {
+                                // App is not open anymore, ignoring
+                                Timber.i(ex, "App is not open anymore, ignoring")
+                            }
                         }
 
                     }

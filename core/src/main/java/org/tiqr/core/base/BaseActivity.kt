@@ -53,7 +53,6 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
 
     override fun onDestroy() {
         binding.unbind()
-
         super.onDestroy()
     }
 }

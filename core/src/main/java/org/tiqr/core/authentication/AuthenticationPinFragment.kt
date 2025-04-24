@@ -43,6 +43,7 @@ import org.tiqr.data.model.AuthenticationCompleteFailure
 import org.tiqr.data.model.ChallengeCompleteResult
 import org.tiqr.data.model.SecretCredential
 import org.tiqr.data.viewmodel.AuthenticationViewModel
+import timber.log.Timber
 
 /**
  * Fragment to enter the PIN code for the authentication
@@ -68,12 +69,16 @@ class AuthenticationPinFragment : BaseFragment<FragmentAuthenticationPinBinding>
             when (completeResult) {
                 is ChallengeCompleteResult.Success -> {
                     viewModel.challenge.value?.let { challenge ->
-                        findNavController().navigate(
-                            AuthenticationPinFragmentDirections.actionSummary(
-                                challenge = challenge,
-                                pin = binding.pin.currentPin
+                        try {
+                            findNavController().navigate(
+                                AuthenticationPinFragmentDirections.actionSummary(
+                                    challenge = challenge,
+                                    pin = binding.pin.currentPin
+                                )
                             )
-                        )
+                        } catch (ex: IllegalStateException) {
+                            Timber.i(ex, "App is not open anymore, ignoring")
+                        }
                     }
 
                 }
@@ -84,12 +89,16 @@ class AuthenticationPinFragment : BaseFragment<FragmentAuthenticationPinBinding>
                             AuthenticationCompleteFailure.Reason.UNKNOWN,
                             AuthenticationCompleteFailure.Reason.CONNECTION -> {
                                 viewModel.challenge.value?.let { challenge ->
-                                    findNavController().navigate(
-                                        AuthenticationPinFragmentDirections.actionFallback(
-                                            pin = binding.pin.currentPin,
-                                            challenge = challenge
+                                    try {
+                                        findNavController().navigate(
+                                            AuthenticationPinFragmentDirections.actionFallback(
+                                                pin = binding.pin.currentPin,
+                                                challenge = challenge
+                                            )
                                         )
-                                    )
+                                    } catch (ex: IllegalStateException) {
+                                        Timber.i(ex, "App is not open anymore, ignoring")
+                                    }
                                 }
                             }
                             AuthenticationCompleteFailure.Reason.INVALID_RESPONSE -> {
