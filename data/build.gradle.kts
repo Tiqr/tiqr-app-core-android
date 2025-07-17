@@ -46,10 +46,6 @@ android {
             correctErrorTypes = true
             useBuildCache = true
 
-            javacOptions {
-                option("-Xmaxerrs", 1000)
-            }
-
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas")
                 arg("room.incremental", "true")
@@ -60,9 +56,6 @@ android {
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_17
 
-        }
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
         }
     }
 
