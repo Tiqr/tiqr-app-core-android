@@ -44,6 +44,7 @@ import org.tiqr.data.model.ChallengeCompleteResult
 import org.tiqr.data.model.SecretCredential
 import org.tiqr.data.model.SecretType
 import org.tiqr.data.viewmodel.AuthenticationViewModel
+import timber.log.Timber
 
 @AndroidEntryPoint
 class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiometricBinding>() {
@@ -54,7 +55,13 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.navigateToFallbackWhenResumed.observe(viewLifecycleOwner) { navigate ->
+            if (navigate) {
+                Timber.i("Navigating to fallback PIN authentication")
+                goToFallback()
+                viewModel.navigateToFallbackWhenResumed.value = false
+            }
+        }
         viewModel.authenticate.observe(viewLifecycleOwner) { it ->
             binding.progress.hide()
 
@@ -121,12 +128,12 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
                 )
                 is AuthenticationBiometricComponent.BiometricResult.Cancel -> {
                     binding.progress.hide()
-                    viewModel.challenge.value?.let { challenge ->
-                        findNavController().navigate(
-                            AuthenticationBiometricFragmentDirections.actionPin(
-                                challenge
-                            )
-                        )
+                    val fragmentManager = activity?.supportFragmentManager
+                    if (fragmentManager?.isStateSaved == true) {
+                        Timber.i("Navigating to fallback PIN authentication not possible because the state is already saved, deferring to onResume")
+                        viewModel.navigateToFallbackWhenResumed.value = true
+                    } else {
+                        goToFallback()
                     }
                 }
                 is AuthenticationBiometricComponent.BiometricResult.Fail -> {
@@ -138,6 +145,16 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
         }.run {
             binding.progress.show()
             authenticate()
+        }
+    }
+
+    private fun goToFallback() {
+        viewModel.challenge.value?.let { challenge ->
+            findNavController().navigate(
+                AuthenticationBiometricFragmentDirections.actionPin(
+                    challenge
+                )
+            )
         }
     }
 }

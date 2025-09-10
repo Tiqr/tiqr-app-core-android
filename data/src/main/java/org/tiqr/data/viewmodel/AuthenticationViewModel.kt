@@ -57,6 +57,7 @@ class AuthenticationViewModel @Inject constructor(
             emit(repository.completeChallenge(it))
         }
     }
+    val navigateToFallbackWhenResumed = MutableLiveData(false)
 
     private val _otpGenerate = MutableLiveData<SecretCredential>()
     val otp = _otpGenerate.switchMap { credential ->
