@@ -56,18 +56,19 @@ class AuthenticationConfirmFragment : BaseFragment<FragmentAuthenticationConfirm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel.challenge.value?.let { challenge ->
-            if (challenge.hasMultipleIdentities && challenge.identity == null) {
-                setHasOptionsMenu(true)
-                findNavController().navigate(
-                    AuthenticationConfirmFragmentDirections.actionIdentity(
-                        challenge = challenge,
-                        cancellable = false
+        if (savedInstanceState == null) {
+            viewModel.challenge.value?.let { challenge ->
+                if (challenge.hasMultipleIdentities && challenge.identity == null) {
+                    setHasOptionsMenu(true)
+                    findNavController().navigate(
+                        AuthenticationConfirmFragmentDirections.actionIdentity(
+                            challenge = challenge,
+                            cancellable = false
+                        )
                     )
-                )
-            } else if (challenge.identity != null) {
-                viewModel.updateIdentity(challenge.identity!!)
+                } else if (challenge.identity != null) {
+                    viewModel.updateIdentity(challenge.identity!!)
+                }
             }
         }
     }

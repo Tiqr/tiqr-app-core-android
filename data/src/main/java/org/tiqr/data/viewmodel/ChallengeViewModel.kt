@@ -79,5 +79,4 @@ abstract class ChallengeViewModel<C : Challenge, R : ChallengeRepository<*>>(
             }
         }
     }
-
 }

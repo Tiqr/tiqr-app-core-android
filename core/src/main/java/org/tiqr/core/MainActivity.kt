@@ -39,6 +39,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat.enableEdgeToEdge
 import androidx.core.view.children
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
@@ -77,8 +78,8 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
 
         installSplashScreen()
-
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge(window)
         navController = getNavController(R.id.nav_host_fragment).apply {
             setSupportActionBar(binding.toolbar)
             setupActionBarWithNavController(

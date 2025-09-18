@@ -26,7 +26,6 @@
 
         <activity
             android:name="org.tiqr.core.MainActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity"
