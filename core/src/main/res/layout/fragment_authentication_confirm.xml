@@ -5,7 +5,7 @@
     tools:context="org.tiqr.core.authentication.AuthenticationConfirmFragment">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="org.tiqr.data.viewmodel.AuthenticationViewModel" />
@@ -37,14 +37,14 @@
             android:id="@+id/table"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="@dimen/authentication_confirm_table_margin_top"
+            android:layout_marginBottom="@dimen/authentication_confirm_table_margin_bottom"
             android:orientation="horizontal"
             app:constraint_referenced_ids="label_name, name, label_id, id, spacer, label_to, service_provider_name, service_provider_identifier"
             app:flow_horizontalGap="4dp"
             app:flow_horizontalStyle="spread_inside"
             app:flow_maxElementsWrap="2"
-            app:flow_verticalGap="6dp"
+            app:flow_verticalGap="@dimen/authentication_confirm_table_vertical_gap"
             app:flow_verticalStyle="packed"
             app:flow_wrapMode="chain"
             app:layout_constrainedHeight="true"
@@ -52,7 +52,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/subtitle"
-            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_bias="@fraction/authentication_confirm_table_vertical_bias"
             tools:ignore="MissingConstraints" />
 
         <TextView
@@ -90,7 +90,7 @@
         <Space
             android:id="@+id/spacer"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="@dimen/authentication_confirm_table_spacer_height"
             tools:ignore="MissingConstraints" />
 
         <TextView
@@ -126,6 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{viewModel.challenge.serviceProviderIdentifier}"
+            android:visibility="@{viewModel.challenge.serviceProviderIdentifier.isEmpty() ? View.GONE : View.VISIBLE}"
             tools:ignore="MissingConstraints"
             tools:text="&lt;service provider identifier&gt;" />
 

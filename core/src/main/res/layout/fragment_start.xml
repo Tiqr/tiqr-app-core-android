@@ -14,26 +14,35 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/default_padding"
         android:theme="@style/AppTheme">
 
-        <TextView
+        <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
-            android:padding="8dp"
-            app:htmlText="@{viewModel.contentType}"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            android:padding="@dimen/default_padding"
+            android:fadeScrollbars="false"
+            android:scrollbarStyle="outsideOverlay"
+            app:layout_constraintBottom_toTopOf="@+id/scan_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:linkifyWeb="@{true}"
-            tools:text="@string/start_welcome" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:padding="8dp"
+                app:htmlText="@{viewModel.contentType}"
+                app:linkifyWeb="@{true}"
+                tools:text="@string/start_welcome" />
+
+        </ScrollView>
 
         <Button
             android:id="@+id/scan_button"
             style="@style/ScanButtonIcon"
             android:layout_width="0dp"
+            android:layout_margin="@dimen/default_padding"
             android:layout_height="60dp"
             android:text="@string/scan_button"
             app:iconGravity="textEnd"
