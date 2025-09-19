@@ -35,6 +35,8 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.text.*
+import android.text.Selection.getSelectionEnd
+import android.text.Selection.getSelectionStart
 import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -44,6 +46,8 @@ import android.view.View
 import android.view.autofill.AutofillValue
 import android.view.inputmethod.BaseInputConnection
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.ExtractedText
+import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -55,6 +59,7 @@ import androidx.core.content.getSystemService
 import androidx.core.content.withStyledAttributes
 import androidx.core.os.postDelayed
 import org.tiqr.core.R
+import timber.log.Timber
 
 /**
  * This composite view advertises itself as a text editor,
@@ -66,6 +71,7 @@ class PinView : ConstraintLayout {
 
         private const val PIN_LENGTH = 4
         private const val PIN_FADE_DURATION = 300L
+
     }
 
     constructor(context: Context) : this(context, null)
@@ -244,7 +250,7 @@ class PinView : ConstraintLayout {
             imeOptions = EditorInfo.IME_ACTION_DONE
         }
 
-        return PinInputConnection(this, true, pinInput) { ok.performClick() }
+        return PinInputConnection(this, true, pinInput, inputMethodManager) { ok.performClick() }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -279,13 +285,22 @@ class PinView : ConstraintLayout {
      * [InputConnection] to handle key presses from numeric keyboard
      */
     class PinInputConnection(
-            target: View,
+            private val target: View,
             full: Boolean,
             private val pin: Editable,
+            private val imm: InputMethodManager?,
             private val ok: () -> Unit
     ) : BaseInputConnection(target, full) {
+
+        private var extractedTextToken: Int? = null
+
         override fun getEditable() = pin
 
+
+        override fun getExtractedText(request: ExtractedTextRequest?, flags: Int): ExtractedText? {
+            extractedTextToken = request?.token
+            return super.getExtractedText(request, flags)
+        }
         override fun sendKeyEvent(event: KeyEvent?): Boolean {
             event?.apply {
                 if (action == KeyEvent.ACTION_DOWN) {
@@ -295,17 +310,47 @@ class PinView : ConstraintLayout {
                         }
                         KeyEvent.KEYCODE_DEL -> {
                             if (pin.isNotEmpty()) {
+                                beginBatchEdit()
                                 pin.delete(pin.lastIndex, pin.length)
+                                endBatchEdit()
+                                updateExtractedText()
                             }
                         }
                         in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                             val number = event.keyCharacterMap.getNumber(event.keyCode)
+                            beginBatchEdit()
                             pin.append(number.toString())
+                            endBatchEdit()
+                            updateExtractedText()
                         }
                     }
                 }
             }
             return super.sendKeyEvent(event)
+        }
+
+        fun updateExtractedText() {
+            val imm = imm
+            val extractedTextToken = extractedTextToken
+            if (imm == null) {
+                Timber.i("Cannot update extracted text, no InputMethodManager")
+                return
+            }
+            if (extractedTextToken == null) {
+                Timber.i("Cannot update extracted text, no token")
+                return
+            }
+            val extractedText = ExtractedText()
+            val content: CharSequence = pin
+            val length = pin.length
+            extractedText.partialStartOffset = 0
+            extractedText.partialEndOffset = length
+            extractedText.startOffset = 0
+            extractedText.selectionStart = getSelectionStart(pin)
+            extractedText.selectionEnd = getSelectionEnd(pin)
+            extractedText.flags = 0
+            extractedText.text = content.subSequence(0, length)
+            imm.updateExtractedText(target, extractedTextToken, extractedText)
         }
     }
 

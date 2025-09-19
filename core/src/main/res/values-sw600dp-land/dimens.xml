@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="default_padding">16dp</dimen>
-    <dimen name="button_container_height">64dp</dimen>
     <dimen name="authentication_confirm_table_vertical_gap">6dp</dimen>
     <dimen name="authentication_confirm_table_margin_top">48dp</dimen>
     <dimen name="authentication_confirm_table_spacer_height">20dp</dimen>

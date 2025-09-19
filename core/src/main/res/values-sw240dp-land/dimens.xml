@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="authentication_confirm_table_vertical_gap">0dp</dimen>
+    <dimen name="authentication_confirm_table_margin_top">8dp</dimen>
+    <dimen name="authentication_confirm_table_spacer_height">8dp</dimen>
+    <dimen name="authentication_confirm_table_margin_bottom">4dp</dimen>
+    <fraction name="authentication_confirm_table_vertical_bias">0.5</fraction>
+</resources>
