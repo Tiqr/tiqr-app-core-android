@@ -96,6 +96,10 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
         }
         mainViewModel.executeTokenMigrationIfNeeded { getDeviceToken() }
         mainViewModel.challenge.observe(this) { result ->
+            if (mainViewModel.didHandleChallenge.value == true) {
+                // Already handled, probably due to configuration change
+                return@observe
+            }
             when (result) {
                 is ChallengeParseResult.Success -> {
                     when (result.value) {
@@ -126,6 +130,7 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
                         .show()
                 }
             }
+            mainViewModel.didHandleChallenge.value = true
         }
         if (TiqrConfig.inAppUpdateCheckEnabled) {
             InAppUpdatesUtil.checkForUpdates(this)

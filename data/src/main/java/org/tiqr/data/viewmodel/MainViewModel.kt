@@ -53,6 +53,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val rawChallengeObserver = MutableLiveData<String>()
+    val didHandleChallenge = MutableLiveData<Boolean>()
     val challenge = rawChallengeObserver.switchMap { rawChallenge ->
         liveData {
             when {
@@ -69,6 +70,7 @@ class MainViewModel @Inject constructor(
      * Parse the [rawChallenge]
      */
     fun parseChallenge(rawChallenge: String) {
+        didHandleChallenge.value = false
         rawChallengeObserver.value = rawChallenge
     }
 
