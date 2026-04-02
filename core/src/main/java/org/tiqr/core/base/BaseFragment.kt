@@ -34,16 +34,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
 /**
  * Base Fragment.
  */
-abstract class BaseFragment<B : ViewDataBinding> : Fragment(), BindingProvider<B> {
-    final override var _binding: B? = null
-        private set
+abstract class BaseFragment : Fragment() {
 
     @get:LayoutRes
     protected abstract val layout: Int
@@ -53,18 +49,6 @@ abstract class BaseFragment<B : ViewDataBinding> : Fragment(), BindingProvider<B
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return DataBindingUtil.inflate<B>(inflater, layout, container, false)
-            .apply {
-                lifecycleOwner = viewLifecycleOwner
-                _binding = this
-            }
-            .root
-    }
-
-    override fun onDestroyView() {
-        _binding?.unbind()
-        _binding = null
-
-        super.onDestroyView()
+        return inflater.inflate(layout, container, false)
     }
 }

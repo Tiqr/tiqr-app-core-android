@@ -35,10 +35,10 @@ import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.databinding.FragmentAuthenticationBiometricBinding
 import org.tiqr.data.model.AuthenticationCompleteFailure
 import org.tiqr.data.model.ChallengeCompleteResult
 import org.tiqr.data.model.SecretCredential
@@ -47,7 +47,7 @@ import org.tiqr.data.viewmodel.AuthenticationViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiometricBinding>() {
+class AuthenticationBiometricFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
 
     @LayoutRes
@@ -55,6 +55,9 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val progress: CircularProgressIndicator = view.findViewById(R.id.progress)
+
         viewModel.navigateToFallbackWhenResumed.observe(viewLifecycleOwner) { navigate ->
             if (navigate) {
                 Timber.i("Navigating to fallback PIN authentication")
@@ -63,13 +66,13 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
             }
         }
         viewModel.authenticate.observe(viewLifecycleOwner) { it ->
-            binding.progress.hide()
+            progress.hide()
 
             when (it) {
                 is ChallengeCompleteResult.Success -> {
                     viewModel.challenge.value?.let { challenge ->
                         findNavController().navigate(
-                            AuthenticationPinFragmentDirections.actionSummary(challenge)
+                            AuthenticationBiometricFragmentDirections.actionSummary(challenge)
                         )
                     }
                 }
@@ -114,20 +117,20 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
             }
         }
 
-        showBiometric()
+        showBiometric(progress)
     }
 
     /**
      * Show biometric dialog
      */
-    private fun showBiometric() {
+    private fun showBiometric(progress: CircularProgressIndicator) {
         AuthenticationBiometricComponent(this, requireContext()) { result ->
             when (result) {
                 is AuthenticationBiometricComponent.BiometricResult.Success -> viewModel.authenticate(
                     SecretCredential.biometric()
                 )
                 is AuthenticationBiometricComponent.BiometricResult.Cancel -> {
-                    binding.progress.hide()
+                    progress.hide()
                     val fragmentManager = activity?.supportFragmentManager
                     if (fragmentManager?.isStateSaved == true) {
                         Timber.i("Navigating to fallback PIN authentication not possible because the state is already saved, deferring to onResume")
@@ -143,7 +146,7 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
                 }
             }
         }.run {
-            binding.progress.show()
+            progress.show()
             authenticate()
         }
     }

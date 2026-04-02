@@ -51,8 +51,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.tasks.await
+import android.widget.ImageView
+import org.tiqr.core.widget.BottomBarView
+import com.google.android.material.appbar.MaterialToolbar
 import org.tiqr.core.base.BaseActivity
-import org.tiqr.core.databinding.ActivityMainBinding
 import org.tiqr.core.scan.ScanFragment
 import org.tiqr.data.util.InAppUpdatesUtil
 import org.tiqr.data.scan.ScanKeyEventsReceiver
@@ -66,11 +68,15 @@ import org.tiqr.data.viewmodel.MainViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-open class MainActivity : BaseActivity<ActivityMainBinding>(),
+open class MainActivity : BaseActivity(),
     NavController.OnDestinationChangedListener {
 
     private val mainViewModel by viewModels<MainViewModel>()
     private lateinit var navController: NavController
+
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var bottombar: BottomBarView
+    private lateinit var topBarIcon: ImageView
 
     @LayoutRes
     override val layout = R.layout.activity_main
@@ -80,8 +86,13 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(window)
+
+        toolbar = findViewById(R.id.toolbar)
+        bottombar = findViewById(R.id.bottombar)
+        topBarIcon = findViewById(R.id.top_bar_icon)
+
         navController = getNavController(R.id.nav_host_fragment).apply {
-            setSupportActionBar(binding.toolbar)
+            setSupportActionBar(toolbar)
             setupActionBarWithNavController(
                 this,
                 AppBarConfiguration.Builder(
@@ -92,7 +103,7 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
 
             addOnDestinationChangedListener(this@MainActivity)
 
-            Navigation.setViewNavController(binding.bottombar, this)
+            Navigation.setViewNavController(bottombar, this)
         }
         mainViewModel.executeTokenMigrationIfNeeded { getDeviceToken() }
         mainViewModel.challenge.observe(this) { result ->
@@ -134,7 +145,7 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
         }
         if (TiqrConfig.inAppUpdateCheckEnabled) {
             InAppUpdatesUtil.checkForUpdates(this)
-            binding.topBarIcon.setOnClickListener(object: OnClickListener {
+            topBarIcon.setOnClickListener(object: OnClickListener {
                 var clickTimes = 0
                 override fun onClick(v: View?) {
                     clickTimes++
@@ -231,11 +242,11 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
      * Toggle the bottom bar visibility.
      */
     private fun toggleBottomBar(visible: Boolean, infoVisible: Boolean = true) {
-        binding.bottombar.children.forEach {
+        bottombar.children.forEach {
             it.clearAnimation()
         }
-        binding.bottombar.infoVisible = infoVisible
-        binding.bottombar.visibility = if (visible) View.VISIBLE else View.GONE
+        bottombar.infoVisible = infoVisible
+        bottombar.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
     /**

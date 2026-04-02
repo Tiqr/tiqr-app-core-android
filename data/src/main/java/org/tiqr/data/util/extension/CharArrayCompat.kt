@@ -254,7 +254,7 @@ private object CharArrayConverter {
                 }
                 // Encode chars from U+10000 up as surrogate pairs
                 if (`val` < 0x10000) {
-                    v[s++] = `val`.toChar()
+                    v[s++] = `val`.toInt().toChar()
                 } else {
                     val x = `val`.toInt().and(0xffff)
                     val u = `val`.toInt().shr(16).and(0x1f)

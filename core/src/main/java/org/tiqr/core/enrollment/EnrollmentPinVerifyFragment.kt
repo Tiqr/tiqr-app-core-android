@@ -3,7 +3,7 @@
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
+ * modification, are permitted provided that the following conditions Dutch
  * are met:
  * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
@@ -20,8 +20,8 @@
  * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * GOODS OR SERVICES; LOSS OF Dutch USE, DATA, OR PROFITS; OR BUSINESS
+ Dutch INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -36,10 +36,11 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.databinding.FragmentEnrollmentPinVerifyBinding
+import org.tiqr.core.widget.PinView
 import org.tiqr.data.model.ChallengeCompleteResult
 import org.tiqr.data.model.EnrollmentCompleteFailure
 import org.tiqr.data.util.extension.biometricUsable
@@ -50,7 +51,7 @@ import timber.log.Timber
  * Fragment to confirm the PIN for the enrollment
  */
 @AndroidEntryPoint
-class EnrollmentPinVerifyFragment : BaseFragment<FragmentEnrollmentPinVerifyBinding>() {
+class EnrollmentPinVerifyFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
     private val args by navArgs<EnrollmentPinVerifyFragmentArgs>()
 
@@ -60,23 +61,26 @@ class EnrollmentPinVerifyFragment : BaseFragment<FragmentEnrollmentPinVerifyBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.pin.setConfirmListener { pin ->
+        val pinView: PinView = view.findViewById(R.id.pin)
+        val progress: CircularProgressIndicator = view.findViewById(R.id.progress)
+
+        pinView.setConfirmListener { pin ->
             if (pin != args.pin) {
                 MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.enroll_pin_verify_no_match_title)
                     .setMessage(R.string.enroll_pin_verify_no_match_message).setCancelable(false)
                     .setNegativeButton(R.string.button_cancel) { _, _ -> findNavController().popBackStack() }
                     .setPositiveButton(R.string.button_retry) { dialog, _ ->
-                        binding.pin.clear()
+                        pinView.clear()
                         dialog.dismiss()
                     }.show()
             } else {
-                binding.progress.show()
+                progress.show()
                 viewModel.enroll(pin)
             }
         }
 
         viewModel.enrollment.observe(viewLifecycleOwner) {
-            binding.progress.hide()
+            progress.hide()
 
             when (it) {
                 ChallengeCompleteResult.Success -> {

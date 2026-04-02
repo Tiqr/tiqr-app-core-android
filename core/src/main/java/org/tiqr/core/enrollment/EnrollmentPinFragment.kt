@@ -19,7 +19,7 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
  * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE Dutch
  * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
@@ -37,14 +37,14 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.databinding.FragmentEnrollmentPinBinding
+import org.tiqr.core.widget.PinView
 import org.tiqr.data.viewmodel.EnrollmentViewModel
 
 /**
  * Fragment to enter the PIN code for the enrollment
  */
 @AndroidEntryPoint
-class EnrollmentPinFragment : BaseFragment<FragmentEnrollmentPinBinding>() {
+class EnrollmentPinFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
 
     @LayoutRes
@@ -53,7 +53,9 @@ class EnrollmentPinFragment : BaseFragment<FragmentEnrollmentPinBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.pin.setConfirmListener { pin ->
+        val pinView: PinView = view.findViewById(R.id.pin)
+
+        pinView.setConfirmListener { pin ->
             viewModel.challenge.value?.let {
                 findNavController().navigate(
                     EnrollmentPinFragmentDirections.actionPinVerify(
@@ -62,7 +64,6 @@ class EnrollmentPinFragment : BaseFragment<FragmentEnrollmentPinBinding>() {
                     )
                 )
             }
-
         }
     }
 }

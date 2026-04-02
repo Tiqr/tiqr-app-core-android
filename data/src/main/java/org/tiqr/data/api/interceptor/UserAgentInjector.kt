@@ -33,6 +33,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import okhttp3.Interceptor
+import okhttp3.OkHttp
 import okhttp3.Response
 
 /**
@@ -77,7 +78,7 @@ internal class UserAgentInjector(private val context: Context) : Interceptor {
         }
 
         androidData ="Android ${Build.VERSION.RELEASE}/${Build.VERSION.SDK_INT}; ${Build.MANUFACTURER} ${Build.MODEL})"
-        networkData = okhttp3.internal.userAgent
+        networkData = OkHttp.VERSION
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

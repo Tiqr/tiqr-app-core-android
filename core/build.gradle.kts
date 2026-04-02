@@ -1,17 +1,16 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.devtools.ksp")
-    kotlin("kapt")
 }
 
-if (JavaVersion.current() < JavaVersion.VERSION_17) {
-    throw GradleException("Please use JDK ${JavaVersion.VERSION_17} or above")
+if (JavaVersion.current() < JavaVersion.VERSION_21) {
+    throw GradleException("Please use JDK ${JavaVersion.VERSION_21} or above")
 }
 
 android {
@@ -33,29 +32,24 @@ android {
             )
         }
 
-        buildFeatures {
-            dataBinding = true
-        }
-
-        kapt {
-            correctErrorTypes = true
-            useBuildCache = true
-        }
-
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
-
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
         }
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
+
+        buildFeatures {
+            dataBinding = false
+            viewBinding = false
         }
     }
     namespace = "org.tiqr.core"
 }
 
+
 kotlin {
-    jvmToolchain(17)
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+    }
 }
 
 fun loadCustomProperties(file: File): Properties {

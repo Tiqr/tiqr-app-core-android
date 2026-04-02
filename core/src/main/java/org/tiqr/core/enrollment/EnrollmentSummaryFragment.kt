@@ -34,6 +34,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
@@ -44,7 +46,6 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.databinding.FragmentEnrollmentSummaryBinding
 import org.tiqr.data.viewmodel.EnrollmentViewModel
 import timber.log.Timber
 
@@ -52,7 +53,7 @@ import timber.log.Timber
  * Fragment to summarize the enrollment
  */
 @AndroidEntryPoint
-class EnrollmentSummaryFragment : BaseFragment<FragmentEnrollmentSummaryBinding>() {
+class EnrollmentSummaryFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
 
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
@@ -77,10 +78,21 @@ class EnrollmentSummaryFragment : BaseFragment<FragmentEnrollmentSummaryBinding>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
-        binding.buttonOk.setOnClickListener {
+        val nameView = view.findViewById<TextView>(R.id.name)
+        val idView = view.findViewById<TextView>(R.id.id)
+        val domainView = view.findViewById<TextView>(R.id.domain)
+        val okButton = view.findViewById<Button>(R.id.button_ok)
+
+        viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
+            nameView.text = challenge?.identity?.displayName
+            idView.text = challenge?.identity?.identifier
+            domainView.text = challenge?.enrollmentHost
+        }
+
+        okButton.setOnClickListener {
             findNavController().popBackStack()
         }
+
         // If on Android 13+, we need to request permission to show push messages
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestNotificationPermission()

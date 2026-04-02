@@ -1,14 +1,12 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
-    kotlin("kapt")
 }
 
-if (JavaVersion.current() < JavaVersion.VERSION_17) {
-    throw GradleException("Please use JDK ${JavaVersion.VERSION_17} or above")
+if (JavaVersion.current() < JavaVersion.VERSION_21) {
+    throw GradleException("Please use JDK ${JavaVersion.VERSION_21} or above")
 }
 
 android {
@@ -59,10 +57,14 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
         }
     }
 
@@ -86,22 +88,18 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
-    kotlin {
-        jvmToolchain(17)
-    }
-
-    kapt {
-        correctErrorTypes = true
-        useBuildCache = true
-    }
     lint {
         abortOnError = false
     }
     namespace = "org.tiqr.sample"
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 dependencies {

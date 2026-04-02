@@ -45,7 +45,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.net.toUri
 import androidx.core.text.parseAsHtml
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -58,7 +57,7 @@ import timber.log.Timber
 /**
  * Parse the string to html
  */
-@BindingAdapter(value = ["htmlText"])
+
 fun TextView.htmlText(html: String) {
     text = html.parseAsHtml()
 }
@@ -66,7 +65,7 @@ fun TextView.htmlText(html: String) {
 /**
  * Parse the string resource to html
  */
-@BindingAdapter(value = ["htmlText"])
+
 fun TextView.htmlText(@StringRes html: Int) {
     text = context.getString(html).parseAsHtml()
 }
@@ -74,7 +73,7 @@ fun TextView.htmlText(@StringRes html: Int) {
 /**
  * Enable (or disable) clickable web links
  */
-@BindingAdapter(value = ["linkifyWeb"])
+
 fun TextView.linkifyWeb(enable: Boolean) {
     if (enable) {
         BetterLinkMovementMethod
@@ -90,7 +89,7 @@ fun TextView.linkifyWeb(enable: Boolean) {
  * Set the [text] and linkify.
  * Use this if text can change (or is null on initial bind).
  */
-@BindingAdapter(value = ["linkifyWebWith"])
+
 fun TextView.linkifyWebWith(text: String?) {
     val link = text?.toHtmlLink()
     setText(link)
@@ -111,7 +110,7 @@ fun TextView.linkifyWebWith(text: String?) {
  * Get the app name and version
  */
 @SuppressLint("SetTextI18n")
-@BindingAdapter(value = ["appName"])
+
 fun TextView.appName(appName: String) {
     val versionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName
     text = context.getString(R.string.about_label_version, appName, versionName)
@@ -120,7 +119,7 @@ fun TextView.appName(appName: String) {
 /**
  * Open browser with specified url
  */
-@BindingAdapter(value = ["openBrowser"])
+
 fun View.openBrowser(url: String) {
     if (url.isEmpty()) return
     setOnClickListener {
@@ -146,7 +145,7 @@ fun Context.openURL(url: String) {
 /**
  * Add dividers
  */
-@BindingAdapter(value = ["dividers", "topDivider"], requireAll = false)
+
 fun RecyclerView.dividers(enable: Boolean, topDivider: Boolean = true) {
     if (enable) {
         // Requires ContextThemeWrapper because in Dialogs android.R.attr.dividerHorizontal is null
@@ -162,7 +161,7 @@ fun RecyclerView.dividers(enable: Boolean, topDivider: Boolean = true) {
 /**
  * Add a (non-interactive) header
  */
-@BindingAdapter(value = ["header"])
+
 fun RecyclerView.header(@LayoutRes view: Int) {
     LayoutInflater.from(context).inflate(view, this, false).also {
         addItemDecoration(HeaderViewDecoration(it, this))
@@ -172,7 +171,7 @@ fun RecyclerView.header(@LayoutRes view: Int) {
 /**
  * Load the [url] into this [ImageView]
  */
-@BindingAdapter(value = ["loadImage"])
+
 fun ImageView.loadImage(url: String?) {
     if (url.isNullOrEmpty()) {
         setImageDrawable(null)
@@ -192,7 +191,7 @@ fun ImageView.loadImage(url: String?) {
 /**
  * Show this [View]
  */
-@BindingAdapter(value = ["showIf"])
+
 fun View.showIf(predicate: Boolean) {
     visibility = if (predicate) View.VISIBLE else View.GONE
 }
@@ -200,7 +199,7 @@ fun View.showIf(predicate: Boolean) {
 /**
  * Hide this [View]
  */
-@BindingAdapter(value = ["hideIf"])
+
 fun View.hideIf(predicate: Boolean) {
     visibility = if (predicate) View.GONE else View.VISIBLE
 }

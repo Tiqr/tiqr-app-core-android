@@ -35,10 +35,13 @@ import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.databinding.FragmentIdentityListBinding
+import org.tiqr.core.util.databinding.dividers
+import org.tiqr.core.util.databinding.header
 import org.tiqr.core.util.extensions.doOnCameraPermission
 import org.tiqr.data.model.IdentityWithProvider
 import org.tiqr.data.viewmodel.IdentityViewModel
@@ -47,7 +50,7 @@ import org.tiqr.data.viewmodel.IdentityViewModel
  * Fragment to displays the list of identities.
  */
 @AndroidEntryPoint
-class IdentityListFragment : BaseFragment<FragmentIdentityListBinding>() {
+class IdentityListFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<IdentityViewModel>(R.id.identity_nav)
     private val listAdapter = IdentityListAdapter(::onItemClick, ::onItemDelete)
 
@@ -59,8 +62,13 @@ class IdentityListFragment : BaseFragment<FragmentIdentityListBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.list.apply {
+        val listView = view.findViewById<RecyclerView>(R.id.list)
+        val addButton = view.findViewById<FloatingActionButton>(R.id.add)
+
+        listView.apply {
             adapter = listAdapter
+            dividers(enable = true, topDivider = true)
+            header(R.layout.list_item_identity_header)
 
             IdentityListAdapter.SwipeCallback(requireContext(), listAdapter) { viewHolder ->
                 itemTouchHelper.startSwipe(viewHolder)
@@ -70,7 +78,7 @@ class IdentityListFragment : BaseFragment<FragmentIdentityListBinding>() {
             }
         }
 
-        binding.add.setOnClickListener {
+        addButton.setOnClickListener {
             requireActivity().doOnCameraPermission {
                 findNavController().navigate(IdentityListFragmentDirections.actionIdentityAdd())
             }

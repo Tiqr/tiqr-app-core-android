@@ -34,13 +34,16 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.databinding.FragmentStartBinding
+import org.tiqr.core.util.databinding.htmlText
+import org.tiqr.core.util.databinding.linkifyWeb
 import org.tiqr.core.util.extensions.doOnCameraPermission
 import org.tiqr.data.viewmodel.StartViewModel
 
@@ -48,7 +51,7 @@ import org.tiqr.data.viewmodel.StartViewModel
  * Fragment to handle main screen and button to qr-scanner.
  */
 @AndroidEntryPoint
-class StartFragment : BaseFragment<FragmentStartBinding>() {
+class StartFragment : BaseFragment() {
     private val viewModel by viewModels<StartViewModel>()
 
     @LayoutRes
@@ -62,14 +65,20 @@ class StartFragment : BaseFragment<FragmentStartBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel.apply {
-            identityCount.observe(viewLifecycleOwner) {
-                // rebuild options menu when count changes
-                requireActivity().invalidateOptionsMenu()
-            }
+        val contentView = view.findViewById<TextView>(R.id.content_text)
+        val scanButton = view.findViewById<Button>(R.id.scan_button)
+
+        viewModel.identityCount.observe(viewLifecycleOwner) {
+            // rebuild options menu when count changes
+            requireActivity().invalidateOptionsMenu()
         }
 
-        binding.scanButton.setOnClickListener {
+        viewModel.contentType.observe(viewLifecycleOwner) {
+            contentView.htmlText(it)
+            contentView.linkifyWeb(true)
+        }
+
+        scanButton.setOnClickListener {
             requireActivity().doOnCameraPermission {
                 findNavController().navigate(StartFragmentDirections.actionScan())
             }

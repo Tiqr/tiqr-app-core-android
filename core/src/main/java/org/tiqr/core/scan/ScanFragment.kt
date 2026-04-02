@@ -31,17 +31,18 @@ package org.tiqr.core.scan
 
 import android.os.Bundle
 import android.view.View
+import androidx.camera.view.PreviewView
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.databinding.FragmentScanBinding
 import org.tiqr.core.util.extensions.hasCameraPermission
 import org.tiqr.data.model.AuthenticationChallenge
 import org.tiqr.data.model.ChallengeParseResult
@@ -51,23 +52,28 @@ import org.tiqr.data.viewmodel.ScanViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-class ScanFragment : BaseFragment<FragmentScanBinding>() {
+class ScanFragment : BaseFragment() {
     override val layout = R.layout.fragment_scan
 
     private val viewModel by viewModels<ScanViewModel>()
 
     private lateinit var scanComponent: ScanComponent
+    private lateinit var viewFinder: PreviewView
+    private lateinit var progress: CircularProgressIndicator
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewFinder.doOnLayout {
+        viewFinder = view.findViewById(R.id.view_finder)
+        progress = view.findViewById(R.id.progress)
+
+        viewFinder.doOnLayout {
             scanComponent = ScanComponent(
                 context = requireContext(),
                 lifecycleOwner = viewLifecycleOwner,
-                viewFinder = binding.viewFinder
+                viewFinder = viewFinder
             ) { result ->
-                binding.progress.show()
+                progress.show()
                 viewModel.parseChallenge(result)
             }
         }
@@ -79,7 +85,7 @@ class ScanFragment : BaseFragment<FragmentScanBinding>() {
      * Parse the result after scanning the QR code.
      */
     private fun handleParse(result: ChallengeParseResult<*, *>) {
-        binding.progress.hide()
+        progress.hide()
         when (result) {
             is ChallengeParseResult.Success -> {
                 viewLifecycleOwner.lifecycleScope.launchWhenResumed {

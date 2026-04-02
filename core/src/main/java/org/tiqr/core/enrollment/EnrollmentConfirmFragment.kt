@@ -31,20 +31,21 @@ package org.tiqr.core.enrollment
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.databinding.FragmentEnrollmentConfirmBinding
 import org.tiqr.data.viewmodel.EnrollmentViewModel
 
 /**
  * Fragment to review and confirm the enrollment
  */
 @AndroidEntryPoint
-class EnrollmentConfirmFragment : BaseFragment<FragmentEnrollmentConfirmBinding>() {
+class EnrollmentConfirmFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
 
     @LayoutRes
@@ -53,13 +54,23 @@ class EnrollmentConfirmFragment : BaseFragment<FragmentEnrollmentConfirmBinding>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
+        val name: TextView = view.findViewById(R.id.name)
+        val id: TextView = view.findViewById(R.id.id)
+        val domain: TextView = view.findViewById(R.id.domain)
+        val buttonCancel: Button = view.findViewById(R.id.button_cancel)
+        val buttonOk: Button = view.findViewById(R.id.button_ok)
 
-        binding.buttonCancel.setOnClickListener {
+        viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
+            name.text = challenge?.identity?.displayName
+            id.text = challenge?.identity?.identifier
+            domain.text = challenge?.enrollmentHost
+        }
+
+        buttonCancel.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        binding.buttonOk.setOnClickListener {
+        buttonOk.setOnClickListener {
             viewModel.challenge.value?.let {
                 findNavController().navigate(EnrollmentConfirmFragmentDirections.actionPin(it))
             }

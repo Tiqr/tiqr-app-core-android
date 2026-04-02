@@ -36,10 +36,10 @@ import android.view.View
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseDialogFragment
-import org.tiqr.core.databinding.FragmentAuthenticationIdentityBinding
 import org.tiqr.data.model.Identity
 import org.tiqr.data.model.IdentityProvider
 import org.tiqr.data.viewmodel.AuthenticationViewModel
@@ -48,7 +48,7 @@ import org.tiqr.data.viewmodel.AuthenticationViewModel
  * Fragment to pick an [Identity] if there are multiple identities for the same [IdentityProvider].
  */
 @AndroidEntryPoint
-class AuthenticationIdentityFragment : BaseDialogFragment<FragmentAuthenticationIdentityBinding>() {
+class AuthenticationIdentityFragment : BaseDialogFragment() {
     private val args by navArgs<AuthenticationIdentityFragmentArgs>()
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
     private val listAdapter = AuthenticationIdentityAdapter(::onItemClick)
@@ -58,7 +58,8 @@ class AuthenticationIdentityFragment : BaseDialogFragment<FragmentAuthentication
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.list.adapter = listAdapter
+        val list: RecyclerView = view.findViewById(R.id.list)
+        list.adapter = listAdapter
 
         viewModel.challenge.observe(viewLifecycleOwner) {
             listAdapter.submitList(it.identities)
