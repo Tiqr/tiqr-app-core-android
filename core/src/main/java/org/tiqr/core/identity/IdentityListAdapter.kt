@@ -107,7 +107,7 @@ class IdentityListAdapter(
         private val onCancel: (RecyclerView.ViewHolder) -> Unit
     ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         private val frameSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80f, context.resources.displayMetrics)
-        private val background = ColorDrawable(context.getThemeColor(com.google.android.material.R.attr.colorOnError))
+        private val background = ColorDrawable(context.getThemeColor(com.google.android.material.R.attr.colorErrorContainer))
         private val icon = ContextCompat.getDrawable(context, R.drawable.ic_delete)?.apply {
             DrawableCompat.setTint(this, context.getThemeColor(com.google.android.material.R.attr.colorOnError))
         }
