@@ -31,11 +31,9 @@ package org.tiqr.core.authentication
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.tiqr.core.R
 import org.tiqr.core.databinding.ListItemIdentitySelectBinding
 import org.tiqr.data.model.Identity
 
@@ -56,14 +54,7 @@ class AuthenticationIdentityAdapter(
     override fun getItemId(position: Int) = getItem(position).id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        DataBindingUtil.inflate<ListItemIdentitySelectBinding>(
-                LayoutInflater.from(parent.context),
-                R.layout.list_item_identity_select,
-                parent,
-                false
-        ).run {
-            return ViewHolder(this)
-        }
+        return ViewHolder(ListItemIdentitySelectBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -72,10 +63,9 @@ class AuthenticationIdentityAdapter(
 
     class ViewHolder(private val binding: ListItemIdentitySelectBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Identity, onClick: (Identity) -> Unit) {
-            binding.model = item
-            binding.executePendingBindings()
-
-            binding.root.setOnClickListener { onClick(item) }
+            binding.identityDisplayName.text = item.displayName
+            binding.identityIdentifier.text = item.identifier
+            itemView.setOnClickListener { onClick(item) }
         }
     }
 }

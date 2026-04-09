@@ -36,6 +36,7 @@ import android.view.View
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseDialogFragment
@@ -48,15 +49,18 @@ import org.tiqr.data.viewmodel.AuthenticationViewModel
  * Fragment to pick an [Identity] if there are multiple identities for the same [IdentityProvider].
  */
 @AndroidEntryPoint
-class AuthenticationIdentityFragment : BaseDialogFragment<FragmentAuthenticationIdentityBinding>() {
+class AuthenticationIdentityFragment : BaseDialogFragment() {
     private val args by navArgs<AuthenticationIdentityFragmentArgs>()
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
     private val listAdapter = AuthenticationIdentityAdapter(::onItemClick)
+
+    private lateinit var binding: FragmentAuthenticationIdentityBinding
 
     override val layout = R.layout.fragment_authentication_identity
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuthenticationIdentityBinding.bind(view)
 
         binding.list.adapter = listAdapter
 

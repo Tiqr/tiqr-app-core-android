@@ -52,9 +52,10 @@ import timber.log.Timber
  * Fragment to summarize the enrollment
  */
 @AndroidEntryPoint
-class EnrollmentSummaryFragment : BaseFragment<FragmentEnrollmentSummaryBinding>() {
+class EnrollmentSummaryFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
 
+    private lateinit var binding: FragmentEnrollmentSummaryBinding
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     @LayoutRes
@@ -76,11 +77,18 @@ class EnrollmentSummaryFragment : BaseFragment<FragmentEnrollmentSummaryBinding>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentEnrollmentSummaryBinding.bind(view)
 
-        binding.viewModel = viewModel
+        viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
+            binding.name.text = challenge?.identity?.displayName
+            binding.id.text = challenge?.identity?.identifier
+            binding.domain.text = challenge?.enrollmentHost
+        }
+
         binding.buttonOk.setOnClickListener {
             findNavController().popBackStack()
         }
+
         // If on Android 13+, we need to request permission to show push messages
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestNotificationPermission()

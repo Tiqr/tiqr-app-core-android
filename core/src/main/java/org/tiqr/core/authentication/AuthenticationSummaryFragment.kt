@@ -47,17 +47,25 @@ import kotlin.system.exitProcess
  * Fragment to summarize the authentication
  */
 @AndroidEntryPoint
-class AuthenticationSummaryFragment : BaseFragment<FragmentAuthenticationSummaryBinding>() {
+class AuthenticationSummaryFragment : BaseFragment() {
     private val args by navArgs<AuthenticationSummaryFragmentArgs>()
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
+
+    private lateinit var binding: FragmentAuthenticationSummaryBinding
 
     @LayoutRes
     override val layout = R.layout.fragment_authentication_summary
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuthenticationSummaryBinding.bind(view)
 
-        binding.viewModel = viewModel
+        viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
+            binding.name.text = challenge?.identity?.displayName
+            binding.id.text = challenge?.identity?.identifier
+            binding.serviceProviderName.text = challenge?.serviceProviderDisplayName
+            binding.serviceProviderIdentifier.text = challenge?.serviceProviderIdentifier
+        }
 
         binding.buttonOk.setOnClickListener {
             requireActivity().finishAffinity()

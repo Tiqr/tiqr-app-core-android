@@ -51,15 +51,17 @@ import org.tiqr.data.viewmodel.ScanViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-class ScanFragment : BaseFragment<FragmentScanBinding>() {
+class ScanFragment : BaseFragment() {
     override val layout = R.layout.fragment_scan
 
     private val viewModel by viewModels<ScanViewModel>()
 
+    private lateinit var binding: FragmentScanBinding
     private lateinit var scanComponent: ScanComponent
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentScanBinding.bind(view)
 
         binding.viewFinder.doOnLayout {
             scanComponent = ScanComponent(

@@ -37,7 +37,6 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
@@ -48,11 +47,12 @@ import org.tiqr.data.viewmodel.AuthenticationViewModel
  * Fragment to review and confirm the authentication
  */
 @AndroidEntryPoint
-class AuthenticationConfirmFragment : BaseFragment<FragmentAuthenticationConfirmBinding>() {
+class AuthenticationConfirmFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
 
     @LayoutRes
     override val layout = R.layout.fragment_authentication_confirm
+    private lateinit var binding: FragmentAuthenticationConfirmBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +79,16 @@ class AuthenticationConfirmFragment : BaseFragment<FragmentAuthenticationConfirm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuthenticationConfirmBinding.bind(view)
 
-        binding.viewModel = viewModel
+        viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
+            binding.name.text = challenge?.identity?.displayName
+            binding.id.text = challenge?.identity?.identifier
+            binding.serviceProviderName.text = challenge?.serviceProviderDisplayName
+            binding.serviceProviderIdentifier.text = challenge?.serviceProviderIdentifier
+            binding.serviceProviderIdentifier.visibility = if (challenge?.serviceProviderIdentifier.isNullOrEmpty()) View.GONE else View.VISIBLE
+            binding.buttonOk.isEnabled = challenge?.identity != null
+        }
 
         binding.buttonCancel.setOnClickListener {
             findNavController().popBackStack()

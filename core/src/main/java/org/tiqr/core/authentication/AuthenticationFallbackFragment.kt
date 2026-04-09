@@ -34,12 +34,12 @@ import android.view.View
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
 import org.tiqr.core.databinding.FragmentAuthenticationFallbackBinding
+import org.tiqr.core.util.databinding.hideIf
 import org.tiqr.data.model.ChallengeCompleteOtpResult
 import org.tiqr.data.viewmodel.AuthenticationViewModel
 
@@ -47,34 +47,44 @@ import org.tiqr.data.viewmodel.AuthenticationViewModel
  * Fragment to authenticate while offline.
  */
 @AndroidEntryPoint
-class AuthenticationFallbackFragment : BaseFragment<FragmentAuthenticationFallbackBinding>() {
+class AuthenticationFallbackFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
     private val args by navArgs<AuthenticationFallbackFragmentArgs>()
+
+    private lateinit var binding: FragmentAuthenticationFallbackBinding
 
     override val layout = R.layout.fragment_authentication_fallback
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuthenticationFallbackBinding.bind(view)
 
-        binding.viewModel = viewModel
+        viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
+            val isStepUp = challenge?.isStepUpChallenge ?: false
+            binding.labelId.hideIf(isStepUp)
+            binding.id.hideIf(isStepUp)
+            binding.id.text = challenge?.identity?.identifier
+            binding.buttonOk.isEnabled = challenge?.identity != null
+        }
 
         binding.buttonOk.setOnClickListener {
             findNavController().popBackStack()
         }
 
         viewModel.generateOTP(args.pin)
-        viewModel.otp.observe(viewLifecycleOwner) {
+        viewModel.otp.observe(viewLifecycleOwner) { result ->
             binding.progress.hide() // already visible from layout
 
-            when (it) {
-                is ChallengeCompleteOtpResult.Failure -> {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setTitle(it.failure.title)
-                        .setMessage(it.failure.message)
-                        .show()
+            when (result) {
+                is ChallengeCompleteOtpResult.Success -> {
+                    binding.otp.text = result.otp
                 }
-                else -> {
-                    // Handled inside binding
+                is ChallengeCompleteOtpResult.Failure -> {
+                    binding.otp.text = ""
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(result.failure.title)
+                        .setMessage(result.failure.message)
+                        .show()
                 }
             }
         }

@@ -40,6 +40,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
 import org.tiqr.core.databinding.FragmentIdentityDetailBinding
+import org.tiqr.core.util.databinding.linkifyWebWith
+import org.tiqr.core.util.databinding.loadImage
+import org.tiqr.core.util.databinding.showIf
 import org.tiqr.data.model.Identity
 import org.tiqr.data.util.extension.biometricUsable
 import org.tiqr.data.viewmodel.IdentityViewModel
@@ -48,25 +51,49 @@ import org.tiqr.data.viewmodel.IdentityViewModel
  * Fragment to display the [Identity] details
  */
 @AndroidEntryPoint
-class IdentityDetailFragment : BaseFragment<FragmentIdentityDetailBinding>() {
+class IdentityDetailFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<IdentityViewModel>(R.id.identity_nav)
     private val args by navArgs<IdentityDetailFragmentArgs>()
+
+    private lateinit var binding: FragmentIdentityDetailBinding
 
     @LayoutRes
     override val layout = R.layout.fragment_identity_detail
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentIdentityDetailBinding.bind(view)
 
-        binding.model = args.identity
+        fun updateUI(item: org.tiqr.data.model.IdentityWithProvider) {
+            binding.title.text = item.identityProvider.displayName
+            binding.subtitle.text = item.identityProvider.identifier
+            binding.logo.loadImage(item.identityProvider.logo)
+            binding.name.text = item.identity.displayName
+            binding.id.text = item.identity.identifier
+            binding.info.linkifyWebWith(item.identityProvider.infoUrl)
+
+            val hasBiometric = requireContext().biometricUsable()
+            val hasBiometricSecret = viewModel.hasBiometricSecret(item.identity)
+
+            val showBiometricUsage = hasBiometric && (item.identity.biometricInUse || hasBiometricSecret)
+            binding.labelBiometric.showIf(showBiometricUsage)
+            binding.biometric.showIf(showBiometricUsage)
+            binding.biometric.isChecked = item.identity.biometricInUse
+
+            val showBiometricUpgrade = hasBiometric && !item.identity.biometricInUse && !hasBiometricSecret
+            binding.labelBiometricUpgrade.showIf(showBiometricUpgrade)
+            binding.biometricUpgrade.showIf(showBiometricUpgrade)
+            binding.biometricUpgrade.isChecked = item.identity.biometricOfferUpgrade
+
+            binding.blocked.showIf(item.identity.blocked)
+        }
+
+        updateUI(args.identity)
 
         viewModel.getIdentity(args.identity.identity.identifier) // Get again to have the flow-livedata active
         viewModel.identity.observe(viewLifecycleOwner) {
             it?.let { identity ->
-                binding.model = identity
-                binding.hasBiometric = requireContext().biometricUsable()
-                binding.hasBiometricSecret = viewModel.hasBiometricSecret(identity.identity)
-                binding.executePendingBindings()
+                updateUI(identity)
             } ?: findNavController().popBackStack()
         }
 

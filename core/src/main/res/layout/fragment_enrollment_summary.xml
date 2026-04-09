@@ -1,144 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  ~ Copyright (c) 2010-2020 SURFnet bv
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without
+  ~ modification, are permitted provided that the following conditions
+  ~ are met:
+  ~ 1. Redistributions of source code must retain the above copyright
+  ~    notice, this list of conditions and the following disclaimer.
+  ~ 2. Redistributions in binary form must reproduce the above copyright
+  ~    notice, this list of conditions and the following disclaimer in the
+  ~    documentation and/or other materials provided with the distribution.
+  ~ 3. Neither the name of SURFnet bv nor the names of its contributors
+  ~    may be used to endorse or promote products derived from this
+  ~    software without specific prior written permission.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR
+  ~ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  ~ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ~ ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+  ~ DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  ~ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  ~ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  ~ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+  ~ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  ~ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+  ~ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/default_padding"
     tools:context="org.tiqr.core.enrollment.EnrollmentSummaryFragment">
 
-    <data>
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/account_activated"
+        android:textAppearance="@style/AppTheme.TextAppearance.Title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <variable
-            name="viewModel"
-            type="org.tiqr.data.viewmodel.EnrollmentViewModel" />
-    </data>
+    <TextView
+        android:id="@+id/details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="12dp"
+        android:text="@string/enroll_confirm_details"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/table"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        app:constraint_referenced_ids="label_name, name, label_id, id, spacer, label_domain, domain"
+        app:flow_horizontalGap="4dp"
+        app:flow_horizontalStyle="spread_inside"
+        app:flow_maxElementsWrap="2"
+        app:flow_verticalGap="6dp"
+        app:flow_verticalStyle="packed"
+        app:flow_wrapMode="chain"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@id/guideline_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details"
+        app:layout_constraintVertical_bias="0"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/label_name"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/account_full_name"
+        android:textAppearance="@style/AppTheme.TextAppearance.Label"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHeight_default="spread"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:breakStrategy="balanced"
+        android:gravity="end"
+        app:layout_constraintHeight_default="spread"
+        app:layout_constraintWidth_default="spread"
+        tools:ignore="MissingConstraints,UnusedAttribute"
+        tools:text="&lt;identity display name&gt;" />
+
+    <TextView
+        android:id="@+id/label_id"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/account_id"
+        android:textAppearance="@style/AppTheme.TextAppearance.Label"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHeight_default="spread"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:breakStrategy="balanced"
+        android:gravity="end"
+        app:layout_constraintHeight_default="spread"
+        app:layout_constraintWidth_default="spread"
+        tools:ignore="MissingConstraints,UnusedAttribute"
+        tools:text="&lt;identity identifier&gt;" />
+
+    <Space
+        android:id="@+id/spacer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/default_padding">
+        android:layout_height="20dp"
+        tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/account_activated"
-            android:textAppearance="@style/AppTheme.TextAppearance.Title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/label_domain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enroll_confirm_domain"
+        tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:layout_marginBottom="12dp"
-            android:text="@string/enroll_confirm_details"
-            android:textStyle="italic"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+    <TextView
+        android:id="@+id/domain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/AppTheme.TextAppearance.Label"
+        tools:ignore="MissingConstraints"
+        tools:text="&lt;enrollment url domain&gt;" />
 
-        <androidx.constraintlayout.helper.widget.Flow
-            android:id="@id/table"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="horizontal"
-            app:constraint_referenced_ids="label_name, name, label_id, id, spacer, label_domain, domain"
-            app:flow_horizontalGap="4dp"
-            app:flow_horizontalStyle="spread_inside"
-            app:flow_maxElementsWrap="2"
-            app:flow_verticalGap="6dp"
-            app:flow_verticalStyle="packed"
-            app:flow_wrapMode="chain"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toTopOf="@id/guideline_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/details"
-            app:layout_constraintVertical_bias="0"
-            tools:ignore="MissingConstraints" />
+    <Button
+        android:id="@+id/button_ok"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/button_ok"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent=".5" />
 
-        <TextView
-            android:id="@+id/label_name"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="@string/account_full_name"
-            android:textAppearance="@style/AppTheme.TextAppearance.Label"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintHeight_default="spread"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:breakStrategy="balanced"
-            android:gravity="end"
-            android:text="@{viewModel.challenge.identity.displayName}"
-            app:layout_constraintHeight_default="spread"
-            app:layout_constraintWidth_default="spread"
-            tools:ignore="MissingConstraints,UnusedAttribute"
-            tools:text="&lt;identity display name&gt;" />
-
-        <TextView
-            android:id="@+id/label_id"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:text="@string/account_id"
-            android:textAppearance="@style/AppTheme.TextAppearance.Label"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintHeight_default="spread"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/id"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:breakStrategy="balanced"
-            android:gravity="end"
-            android:text="@{viewModel.challenge.identity.identifier}"
-            app:layout_constraintHeight_default="spread"
-            app:layout_constraintWidth_default="spread"
-            tools:ignore="MissingConstraints,UnusedAttribute"
-            tools:text="&lt;identity identifier&gt;" />
-
-        <Space
-            android:id="@+id/spacer"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/label_domain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/enroll_confirm_domain"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/domain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.challenge.enrollmentHost}"
-            android:textAppearance="@style/AppTheme.TextAppearance.Label"
-            tools:ignore="MissingConstraints"
-            tools:text="&lt;enrollment url domain&gt;" />
-
-        <Button
-            android:id="@+id/button_ok"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/button_ok"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent=".5" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="@dimen/button_container_height" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/button_container_height" />
+</androidx.constraintlayout.widget.ConstraintLayout>

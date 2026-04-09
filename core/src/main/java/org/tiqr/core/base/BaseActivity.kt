@@ -32,27 +32,17 @@ package org.tiqr.core.base
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 
 /**
- * Base Activity for DataBinding.
+ * Base Activity.
  */
-abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
-    protected lateinit var binding: B
+abstract class BaseActivity : AppCompatActivity() {
 
     @get:LayoutRes
     protected abstract val layout: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(this, layout)
-        binding.lifecycleOwner = this
-    }
-
-    override fun onDestroy() {
-        binding.unbind()
-        super.onDestroy()
+        setContentView(layout)
     }
 }

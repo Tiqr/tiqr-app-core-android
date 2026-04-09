@@ -29,16 +29,32 @@
 
 package org.tiqr.core.about
 
+import android.os.Bundle
+import android.view.View
 import androidx.annotation.LayoutRes
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
 import org.tiqr.core.databinding.FragmentAboutBinding
-
+import org.tiqr.core.util.Urls
+import org.tiqr.core.util.databinding.appName
+import org.tiqr.core.util.databinding.openBrowser
 
 /**
  * Fragment to show the about screen.
  */
-class AboutFragment : BaseFragment<FragmentAboutBinding>() {
+class AboutFragment : BaseFragment() {
     @LayoutRes
     override val layout = R.layout.fragment_about
+    private lateinit var binding: FragmentAboutBinding
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAboutBinding.bind(view)
+
+        binding.app.openBrowser(getString(R.string.app_url))
+        binding.appVersionText.appName(getString(R.string.app_name))
+        binding.provider.openBrowser(Urls.URL_SURFNET)
+        binding.developer.openBrowser(Urls.URL_EGENIQ)
+        binding.designer.openBrowser(Urls.URL_KEEN)
+    }
 }

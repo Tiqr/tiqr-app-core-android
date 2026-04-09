@@ -47,14 +47,17 @@ import org.tiqr.data.viewmodel.AuthenticationViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiometricBinding>() {
+class AuthenticationBiometricFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
 
     @LayoutRes
     override val layout = R.layout.fragment_authentication_biometric
+    private lateinit var binding: FragmentAuthenticationBiometricBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuthenticationBiometricBinding.bind(view)
+
         viewModel.navigateToFallbackWhenResumed.observe(viewLifecycleOwner) { navigate ->
             if (navigate) {
                 Timber.i("Navigating to fallback PIN authentication")
@@ -69,7 +72,7 @@ class AuthenticationBiometricFragment : BaseFragment<FragmentAuthenticationBiome
                 is ChallengeCompleteResult.Success -> {
                     viewModel.challenge.value?.let { challenge ->
                         findNavController().navigate(
-                            AuthenticationPinFragmentDirections.actionSummary(challenge)
+                            AuthenticationBiometricFragmentDirections.actionSummary(challenge)
                         )
                     }
                 }

@@ -44,16 +44,23 @@ import org.tiqr.data.viewmodel.EnrollmentViewModel
  * Fragment to review and confirm the enrollment
  */
 @AndroidEntryPoint
-class EnrollmentConfirmFragment : BaseFragment<FragmentEnrollmentConfirmBinding>() {
+class EnrollmentConfirmFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
+
+    private lateinit var binding: FragmentEnrollmentConfirmBinding
 
     @LayoutRes
     override val layout = R.layout.fragment_enrollment_confirm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentEnrollmentConfirmBinding.bind(view)
 
-        binding.viewModel = viewModel
+        viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
+            binding.name.text = challenge?.identity?.displayName
+            binding.id.text = challenge?.identity?.identifier
+            binding.domain.text = challenge?.enrollmentHost
+        }
 
         binding.buttonCancel.setOnClickListener {
             findNavController().popBackStack()

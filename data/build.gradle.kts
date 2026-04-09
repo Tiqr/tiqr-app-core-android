@@ -2,15 +2,13 @@ import java.util.Properties
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("com.google.devtools.ksp")
-    kotlin("kapt")
 }
 
-if (JavaVersion.current() < JavaVersion.VERSION_11) {
-    throw GradleException("Please use JDK ${JavaVersion.VERSION_11} or above")
+if (JavaVersion.current() < JavaVersion.VERSION_21) {
+    throw GradleException("Please use JDK ${JavaVersion.VERSION_21} or above")
 }
 
 val secureProperties = loadCustomProperties(file("../local.properties"))
@@ -42,25 +40,15 @@ android {
             )
         }
 
-        kapt {
-            correctErrorTypes = true
-            useBuildCache = true
-
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-                arg("room.incremental", "true")
-            }
-        }
-
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_17
-            targetCompatibility = JavaVersion.VERSION_17
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
 
         }
     }
 
     kotlin {
-        jvmToolchain(17)
+        jvmToolchain(21)
     }
 
     namespace = "org.tiqr.data"
@@ -73,11 +61,13 @@ android {
         implementation(libs.kotlinx.coroutines.core)
         implementation(libs.kotlinx.coroutines.android)
         implementation(libs.androidx.core)
+        implementation(libs.androidx.localBroadcastManager)
         implementation(libs.androidx.lifecycle.livedata)
         implementation(libs.androidx.lifecycle.viewmodel)
         implementation(libs.androidx.lifecycle.scope)
         implementation(libs.androidx.appUpdate)
         implementation(libs.google.android.material)
+        implementation(libs.google.guava)
 
 
         implementation(libs.dagger.hilt.android)

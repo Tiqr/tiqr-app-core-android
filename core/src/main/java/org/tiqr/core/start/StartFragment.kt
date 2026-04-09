@@ -41,6 +41,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
 import org.tiqr.core.databinding.FragmentStartBinding
+import org.tiqr.core.util.databinding.htmlText
+import org.tiqr.core.util.databinding.linkifyWeb
 import org.tiqr.core.util.extensions.doOnCameraPermission
 import org.tiqr.data.viewmodel.StartViewModel
 
@@ -48,8 +50,10 @@ import org.tiqr.data.viewmodel.StartViewModel
  * Fragment to handle main screen and button to qr-scanner.
  */
 @AndroidEntryPoint
-class StartFragment : BaseFragment<FragmentStartBinding>() {
+class StartFragment : BaseFragment() {
     private val viewModel by viewModels<StartViewModel>()
+
+    private lateinit var binding: FragmentStartBinding
 
     @LayoutRes
     override val layout: Int = R.layout.fragment_start
@@ -61,12 +65,16 @@ class StartFragment : BaseFragment<FragmentStartBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentStartBinding.bind(view)
 
-        binding.viewModel = viewModel.apply {
-            identityCount.observe(viewLifecycleOwner) {
-                // rebuild options menu when count changes
-                requireActivity().invalidateOptionsMenu()
-            }
+        viewModel.identityCount.observe(viewLifecycleOwner) {
+            // rebuild options menu when count changes
+            requireActivity().invalidateOptionsMenu()
+        }
+
+        viewModel.contentType.observe(viewLifecycleOwner) {
+            binding.contentText.htmlText(it)
+            binding.contentText.linkifyWeb(true)
         }
 
         binding.scanButton.setOnClickListener {

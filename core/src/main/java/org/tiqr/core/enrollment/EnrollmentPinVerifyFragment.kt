@@ -21,7 +21,7 @@
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
  * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
  * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -50,15 +50,18 @@ import timber.log.Timber
  * Fragment to confirm the PIN for the enrollment
  */
 @AndroidEntryPoint
-class EnrollmentPinVerifyFragment : BaseFragment<FragmentEnrollmentPinVerifyBinding>() {
+class EnrollmentPinVerifyFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
     private val args by navArgs<EnrollmentPinVerifyFragmentArgs>()
+
+    private lateinit var binding: FragmentEnrollmentPinVerifyBinding
 
     @LayoutRes
     override val layout = R.layout.fragment_enrollment_pin_verify
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentEnrollmentPinVerifyBinding.bind(view)
 
         binding.pin.setConfirmListener { pin ->
             if (pin != args.pin) {

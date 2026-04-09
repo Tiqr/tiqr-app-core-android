@@ -30,6 +30,7 @@
 package org.tiqr.core.identity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -39,6 +40,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
 import org.tiqr.core.databinding.FragmentIdentityListBinding
+import org.tiqr.core.databinding.ListItemIdentityHeaderBinding
+import org.tiqr.core.util.databinding.dividers
+import org.tiqr.core.util.databinding.header
 import org.tiqr.core.util.extensions.doOnCameraPermission
 import org.tiqr.data.model.IdentityWithProvider
 import org.tiqr.data.viewmodel.IdentityViewModel
@@ -47,10 +51,11 @@ import org.tiqr.data.viewmodel.IdentityViewModel
  * Fragment to displays the list of identities.
  */
 @AndroidEntryPoint
-class IdentityListFragment : BaseFragment<FragmentIdentityListBinding>() {
+class IdentityListFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<IdentityViewModel>(R.id.identity_nav)
     private val listAdapter = IdentityListAdapter(::onItemClick, ::onItemDelete)
 
+    private lateinit var binding: FragmentIdentityListBinding
     private lateinit var itemTouchHelper: ItemTouchHelper
 
     @LayoutRes
@@ -58,9 +63,12 @@ class IdentityListFragment : BaseFragment<FragmentIdentityListBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentIdentityListBinding.bind(view)
 
         binding.list.apply {
             adapter = listAdapter
+            dividers(enable = true, topDivider = true)
+            header(ListItemIdentityHeaderBinding.inflate(LayoutInflater.from(context), this, false))
 
             IdentityListAdapter.SwipeCallback(requireContext(), listAdapter) { viewHolder ->
                 itemTouchHelper.startSwipe(viewHolder)

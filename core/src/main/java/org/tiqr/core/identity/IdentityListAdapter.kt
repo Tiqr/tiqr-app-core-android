@@ -37,7 +37,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
@@ -45,6 +44,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.tiqr.core.R
 import org.tiqr.core.databinding.ListItemIdentityBinding
+import org.tiqr.core.util.databinding.loadImage
+import org.tiqr.core.util.databinding.showIf
 import org.tiqr.core.util.extensions.getThemeColor
 import org.tiqr.data.model.IdentityWithProvider
 import kotlin.math.roundToInt
@@ -73,24 +74,19 @@ class IdentityListAdapter(
     override fun getItemId(position: Int) = getItem(position).identity.id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        DataBindingUtil.inflate<ListItemIdentityBinding>(
-                LayoutInflater.from(parent.context),
-                R.layout.list_item_identity,
-                parent,
-                false
-        ).run {
-            return ViewHolder(this)
-        }
+        return ViewHolder(ListItemIdentityBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(getItem(position), onClick)
 
     class ViewHolder(private val binding: ListItemIdentityBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: IdentityWithProvider, onClick: (IdentityWithProvider) -> Unit) {
-            binding.model = item
-            binding.executePendingBindings()
+            binding.logo.loadImage(item.identityProvider.logo)
+            binding.identityDisplayName.text = item.identity.displayName
+            binding.identityIdentifier.text = item.identity.identifier
+            binding.blocked.showIf(item.identity.blocked)
 
-            binding.root.setOnClickListener { onClick(item) }
+            itemView.setOnClickListener { onClick(item) }
         }
     }
 
@@ -103,7 +99,7 @@ class IdentityListAdapter(
         private val onCancel: (RecyclerView.ViewHolder) -> Unit
     ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
         private val frameSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80f, context.resources.displayMetrics)
-        private val background = ColorDrawable(context.getThemeColor(com.google.android.material.R.attr.colorError))
+        private val background = ColorDrawable(context.getThemeColor(com.google.android.material.R.attr.colorErrorContainer))
         private val icon = ContextCompat.getDrawable(context, R.drawable.ic_delete)?.apply {
             DrawableCompat.setTint(this, context.getThemeColor(com.google.android.material.R.attr.colorOnError))
         }

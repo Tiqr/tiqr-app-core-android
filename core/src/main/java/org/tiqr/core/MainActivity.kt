@@ -54,23 +54,24 @@ import kotlinx.coroutines.tasks.await
 import org.tiqr.core.base.BaseActivity
 import org.tiqr.core.databinding.ActivityMainBinding
 import org.tiqr.core.scan.ScanFragment
-import org.tiqr.data.util.InAppUpdatesUtil
-import org.tiqr.data.scan.ScanKeyEventsReceiver
 import org.tiqr.core.util.extensions.currentNavigationFragment
 import org.tiqr.core.util.extensions.getNavController
 import org.tiqr.data.model.AuthenticationChallenge
 import org.tiqr.data.model.ChallengeParseResult
 import org.tiqr.data.model.EnrollmentChallenge
 import org.tiqr.data.model.TiqrConfig
+import org.tiqr.data.scan.ScanKeyEventsReceiver
+import org.tiqr.data.util.InAppUpdatesUtil
 import org.tiqr.data.viewmodel.MainViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-open class MainActivity : BaseActivity<ActivityMainBinding>(),
+open class MainActivity : BaseActivity(),
     NavController.OnDestinationChangedListener {
 
     private val mainViewModel by viewModels<MainViewModel>()
     private lateinit var navController: NavController
+    private lateinit var binding: ActivityMainBinding
 
     @LayoutRes
     override val layout = R.layout.activity_main
@@ -78,8 +79,11 @@ open class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun onCreate(savedInstanceState: Bundle?) {
 
         installSplashScreen()
+        binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         enableEdgeToEdge(window)
+
         navController = getNavController(R.id.nav_host_fragment).apply {
             setSupportActionBar(binding.toolbar)
             setupActionBarWithNavController(

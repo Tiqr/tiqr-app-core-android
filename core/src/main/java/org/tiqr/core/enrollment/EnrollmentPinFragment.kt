@@ -44,14 +44,17 @@ import org.tiqr.data.viewmodel.EnrollmentViewModel
  * Fragment to enter the PIN code for the enrollment
  */
 @AndroidEntryPoint
-class EnrollmentPinFragment : BaseFragment<FragmentEnrollmentPinBinding>() {
+class EnrollmentPinFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
+
+    private lateinit var binding: FragmentEnrollmentPinBinding
 
     @LayoutRes
     override val layout = R.layout.fragment_enrollment_pin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentEnrollmentPinBinding.bind(view)
 
         binding.pin.setConfirmListener { pin ->
             viewModel.challenge.value?.let {
@@ -62,7 +65,6 @@ class EnrollmentPinFragment : BaseFragment<FragmentEnrollmentPinBinding>() {
                     )
                 )
             }
-
         }
     }
 }

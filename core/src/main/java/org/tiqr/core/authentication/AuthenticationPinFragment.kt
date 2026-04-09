@@ -49,14 +49,17 @@ import timber.log.Timber
  * Fragment to enter the PIN code for the authentication
  */
 @AndroidEntryPoint
-class AuthenticationPinFragment : BaseFragment<FragmentAuthenticationPinBinding>() {
+class AuthenticationPinFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
+
+    private lateinit var binding: FragmentAuthenticationPinBinding
 
     @LayoutRes
     override val layout = R.layout.fragment_authentication_pin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuthenticationPinBinding.bind(view)
 
         binding.pin.setConfirmListener { pin ->
             binding.progress.show()
