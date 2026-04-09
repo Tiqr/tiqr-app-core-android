@@ -79,8 +79,8 @@ open class MainActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
 
         installSplashScreen()
-        binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge(window)
 
