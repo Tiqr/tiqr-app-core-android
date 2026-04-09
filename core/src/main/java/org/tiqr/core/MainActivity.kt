@@ -81,7 +81,6 @@ open class MainActivity : BaseActivity(),
         installSplashScreen()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         enableEdgeToEdge(window)
 
         navController = getNavController(R.id.nav_host_fragment).apply {
