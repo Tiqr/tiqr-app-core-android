@@ -34,8 +34,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
@@ -46,6 +44,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
+import org.tiqr.core.databinding.FragmentEnrollmentSummaryBinding
 import org.tiqr.data.viewmodel.EnrollmentViewModel
 import timber.log.Timber
 
@@ -56,6 +55,7 @@ import timber.log.Timber
 class EnrollmentSummaryFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
 
+    private lateinit var binding: FragmentEnrollmentSummaryBinding
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     @LayoutRes
@@ -77,19 +77,15 @@ class EnrollmentSummaryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val nameView = view.findViewById<TextView>(R.id.name)
-        val idView = view.findViewById<TextView>(R.id.id)
-        val domainView = view.findViewById<TextView>(R.id.domain)
-        val okButton = view.findViewById<Button>(R.id.button_ok)
+        binding = FragmentEnrollmentSummaryBinding.bind(view)
 
         viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
-            nameView.text = challenge?.identity?.displayName
-            idView.text = challenge?.identity?.identifier
-            domainView.text = challenge?.enrollmentHost
+            binding.name.text = challenge?.identity?.displayName
+            binding.id.text = challenge?.identity?.identifier
+            binding.domain.text = challenge?.enrollmentHost
         }
 
-        okButton.setOnClickListener {
+        binding.buttonOk.setOnClickListener {
             findNavController().popBackStack()
         }
 

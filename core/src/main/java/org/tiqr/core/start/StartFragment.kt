@@ -34,14 +34,13 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
+import org.tiqr.core.databinding.FragmentStartBinding
 import org.tiqr.core.util.databinding.htmlText
 import org.tiqr.core.util.databinding.linkifyWeb
 import org.tiqr.core.util.extensions.doOnCameraPermission
@@ -54,6 +53,8 @@ import org.tiqr.data.viewmodel.StartViewModel
 class StartFragment : BaseFragment() {
     private val viewModel by viewModels<StartViewModel>()
 
+    private lateinit var binding: FragmentStartBinding
+
     @LayoutRes
     override val layout: Int = R.layout.fragment_start
 
@@ -64,9 +65,7 @@ class StartFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val contentView = view.findViewById<TextView>(R.id.content_text)
-        val scanButton = view.findViewById<Button>(R.id.scan_button)
+        binding = FragmentStartBinding.bind(view)
 
         viewModel.identityCount.observe(viewLifecycleOwner) {
             // rebuild options menu when count changes
@@ -74,11 +73,11 @@ class StartFragment : BaseFragment() {
         }
 
         viewModel.contentType.observe(viewLifecycleOwner) {
-            contentView.htmlText(it)
-            contentView.linkifyWeb(true)
+            binding.contentText.htmlText(it)
+            binding.contentText.linkifyWeb(true)
         }
 
-        scanButton.setOnClickListener {
+        binding.scanButton.setOnClickListener {
             requireActivity().doOnCameraPermission {
                 findNavController().navigate(StartFragmentDirections.actionScan())
             }

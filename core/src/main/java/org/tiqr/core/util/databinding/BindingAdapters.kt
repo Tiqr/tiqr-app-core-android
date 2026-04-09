@@ -37,15 +37,16 @@ import android.text.Spanned
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.net.toUri
 import androidx.core.text.parseAsHtml
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import coil.load
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.tiqr.core.R
@@ -162,10 +163,8 @@ fun RecyclerView.dividers(enable: Boolean, topDivider: Boolean = true) {
  * Add a (non-interactive) header
  */
 
-fun RecyclerView.header(@LayoutRes view: Int) {
-    LayoutInflater.from(context).inflate(view, this, false).also {
-        addItemDecoration(HeaderViewDecoration(it, this))
-    }
+fun RecyclerView.header(binding: ViewBinding) {
+    addItemDecoration(HeaderViewDecoration(binding.root, this))
 }
 
 /**

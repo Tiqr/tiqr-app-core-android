@@ -34,14 +34,13 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
+import org.tiqr.core.databinding.FragmentAuthenticationConfirmBinding
 import org.tiqr.data.viewmodel.AuthenticationViewModel
 
 /**
@@ -53,6 +52,7 @@ class AuthenticationConfirmFragment : BaseFragment() {
 
     @LayoutRes
     override val layout = R.layout.fragment_authentication_confirm
+    private lateinit var binding: FragmentAuthenticationConfirmBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,28 +79,22 @@ class AuthenticationConfirmFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val name: TextView = view.findViewById(R.id.name)
-        val id: TextView = view.findViewById(R.id.id)
-        val serviceProviderName: TextView = view.findViewById(R.id.service_provider_name)
-        val serviceProviderIdentifier: TextView = view.findViewById(R.id.service_provider_identifier)
-        val buttonCancel: Button = view.findViewById(R.id.button_cancel)
-        val buttonOk: Button = view.findViewById(R.id.button_ok)
+        binding = FragmentAuthenticationConfirmBinding.bind(view)
 
         viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
-            name.text = challenge?.identity?.displayName
-            id.text = challenge?.identity?.identifier
-            serviceProviderName.text = challenge?.serviceProviderDisplayName
-            serviceProviderIdentifier.text = challenge?.serviceProviderIdentifier
-            serviceProviderIdentifier.visibility = if (challenge?.serviceProviderIdentifier.isNullOrEmpty()) View.GONE else View.VISIBLE
-            buttonOk.isEnabled = challenge?.identity != null
+            binding.name.text = challenge?.identity?.displayName
+            binding.id.text = challenge?.identity?.identifier
+            binding.serviceProviderName.text = challenge?.serviceProviderDisplayName
+            binding.serviceProviderIdentifier.text = challenge?.serviceProviderIdentifier
+            binding.serviceProviderIdentifier.visibility = if (challenge?.serviceProviderIdentifier.isNullOrEmpty()) View.GONE else View.VISIBLE
+            binding.buttonOk.isEnabled = challenge?.identity != null
         }
 
-        buttonCancel.setOnClickListener {
+        binding.buttonCancel.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        buttonOk.setOnClickListener {
+        binding.buttonOk.setOnClickListener {
             viewModel.challenge.value?.let { challenge ->
                 if (viewModel.challenge.value?.identity?.biometricInUse == true) {
                     findNavController().navigate(

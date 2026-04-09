@@ -41,6 +41,7 @@ import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.autofill.AutofillValue
@@ -59,6 +60,7 @@ import androidx.core.content.getSystemService
 import androidx.core.content.withStyledAttributes
 import androidx.core.os.postDelayed
 import org.tiqr.core.R
+import org.tiqr.core.databinding.ViewPinBinding
 import timber.log.Timber
 
 /**
@@ -83,6 +85,7 @@ class PinView : ConstraintLayout {
     }
 
     private var isForNewPin: Boolean = false
+    private val binding = ViewPinBinding.inflate(LayoutInflater.from(context), this)
     private val pinInput: Editable
     private val ok: Button
     private val pins: List<TextView>
@@ -102,8 +105,6 @@ class PinView : ConstraintLayout {
         get() = pinInput.toString()
 
     init {
-        View.inflate(context, R.layout.view_pin, this)
-
         isClickable = true
         isLongClickable = true
         isFocusable = true
@@ -120,10 +121,10 @@ class PinView : ConstraintLayout {
         pinInput.setSpan(inputWatcher, 0, pinInput.length, Spanned.SPAN_INCLUSIVE_INCLUSIVE)
 
         pins = listOf(
-                findViewById(R.id.pin1),
-                findViewById(R.id.pin2),
-                findViewById(R.id.pin3),
-                findViewById(R.id.pin4)
+                binding.pin1,
+                binding.pin2,
+                binding.pin3,
+                binding.pin4
         )
 
         pins.forEach {
@@ -133,7 +134,7 @@ class PinView : ConstraintLayout {
             it.isLongClickable = false
         }
 
-        ok = findViewById(R.id.pin_ok)
+        ok = binding.pinOk
         ok.setOnClickListener {
             if (it.isEnabled) {
                 inputMethodManager?.hideSoftInputFromWindow(windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)

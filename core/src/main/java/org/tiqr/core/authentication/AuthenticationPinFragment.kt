@@ -35,11 +35,10 @@ import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.widget.PinView
+import org.tiqr.core.databinding.FragmentAuthenticationPinBinding
 import org.tiqr.data.model.AuthenticationCompleteFailure
 import org.tiqr.data.model.ChallengeCompleteResult
 import org.tiqr.data.model.SecretCredential
@@ -53,22 +52,22 @@ import timber.log.Timber
 class AuthenticationPinFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
 
+    private lateinit var binding: FragmentAuthenticationPinBinding
+
     @LayoutRes
     override val layout = R.layout.fragment_authentication_pin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuthenticationPinBinding.bind(view)
 
-        val pinView: PinView = view.findViewById(R.id.pin)
-        val progress: CircularProgressIndicator = view.findViewById(R.id.progress)
-
-        pinView.setConfirmListener { pin ->
-            progress.show()
+        binding.pin.setConfirmListener { pin ->
+            binding.progress.show()
             viewModel.authenticate(SecretCredential.pin(pin))
         }
 
         viewModel.authenticate.observe(viewLifecycleOwner) { completeResult ->
-            progress.hide()
+            binding.progress.hide()
 
             when (completeResult) {
                 is ChallengeCompleteResult.Success -> {
@@ -77,7 +76,7 @@ class AuthenticationPinFragment : BaseFragment() {
                             findNavController().navigate(
                                 AuthenticationPinFragmentDirections.actionSummary(
                                     challenge = challenge,
-                                    pin = pinView.currentPin
+                                    pin = binding.pin.currentPin
                                 )
                             )
                         } catch (ex: IllegalStateException) {
@@ -96,7 +95,7 @@ class AuthenticationPinFragment : BaseFragment() {
                                     try {
                                         findNavController().navigate(
                                             AuthenticationPinFragmentDirections.actionFallback(
-                                                pin = pinView.currentPin,
+                                                pin = binding.pin.currentPin,
                                                 challenge = challenge
                                             )
                                         )
@@ -108,7 +107,7 @@ class AuthenticationPinFragment : BaseFragment() {
                             AuthenticationCompleteFailure.Reason.INVALID_RESPONSE -> {
                                 val remaining = failure.remainingAttempts
                                 if (remaining == null || remaining > 0) {
-                                    pinView.clear(showKeyboard = true)
+                                    binding.pin.clear(showKeyboard = true)
                                 }
 
                                 MaterialAlertDialogBuilder(requireContext())

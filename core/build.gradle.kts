@@ -31,16 +31,16 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
 
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
-        }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
 
-        buildFeatures {
-            dataBinding = false
-            viewBinding = false
-        }
+    buildFeatures {
+        dataBinding = false
+        viewBinding = true
     }
     namespace = "org.tiqr.core"
 }

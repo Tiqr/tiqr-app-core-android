@@ -30,13 +30,11 @@
 package org.tiqr.core.authentication
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.tiqr.core.R
+import org.tiqr.core.databinding.ListItemIdentitySelectBinding
 import org.tiqr.data.model.Identity
 
 /**
@@ -56,21 +54,17 @@ class AuthenticationIdentityAdapter(
     override fun getItemId(position: Int) = getItem(position).id
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_identity_select, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(ListItemIdentitySelectBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position), onClick)
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val displayName: TextView = view.findViewById(R.id.identity_display_name)
-        private val identifier: TextView = view.findViewById(R.id.identity_identifier)
-
+    class ViewHolder(private val binding: ListItemIdentitySelectBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Identity, onClick: (Identity) -> Unit) {
-            displayName.text = item.displayName
-            identifier.text = item.identifier
+            binding.identityDisplayName.text = item.displayName
+            binding.identityIdentifier.text = item.identifier
             itemView.setOnClickListener { onClick(item) }
         }
     }

@@ -37,7 +37,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.widget.PinView
+import org.tiqr.core.databinding.FragmentEnrollmentPinBinding
 import org.tiqr.data.viewmodel.EnrollmentViewModel
 
 /**
@@ -47,15 +47,16 @@ import org.tiqr.data.viewmodel.EnrollmentViewModel
 class EnrollmentPinFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
 
+    private lateinit var binding: FragmentEnrollmentPinBinding
+
     @LayoutRes
     override val layout = R.layout.fragment_enrollment_pin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentEnrollmentPinBinding.bind(view)
 
-        val pinView: PinView = view.findViewById(R.id.pin)
-
-        pinView.setConfirmListener { pin ->
+        binding.pin.setConfirmListener { pin ->
             viewModel.challenge.value?.let {
                 findNavController().navigate(
                     EnrollmentPinFragmentDirections.actionPinVerify(

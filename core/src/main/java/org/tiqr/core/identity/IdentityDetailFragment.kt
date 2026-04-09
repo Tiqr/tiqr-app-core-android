@@ -31,18 +31,15 @@ package org.tiqr.core.identity
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
+import org.tiqr.core.databinding.FragmentIdentityDetailBinding
 import org.tiqr.core.util.databinding.linkifyWebWith
 import org.tiqr.core.util.databinding.loadImage
 import org.tiqr.core.util.databinding.showIf
@@ -58,47 +55,37 @@ class IdentityDetailFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<IdentityViewModel>(R.id.identity_nav)
     private val args by navArgs<IdentityDetailFragmentArgs>()
 
+    private lateinit var binding: FragmentIdentityDetailBinding
+
     @LayoutRes
     override val layout = R.layout.fragment_identity_detail
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val titleView = view.findViewById<TextView>(R.id.title)
-        val subtitleView = view.findViewById<TextView>(R.id.subtitle)
-        val logoView = view.findViewById<ImageView>(R.id.logo)
-        val nameView = view.findViewById<TextView>(R.id.name)
-        val idView = view.findViewById<TextView>(R.id.id)
-        val infoView = view.findViewById<TextView>(R.id.info)
-        val labelBiometric = view.findViewById<TextView>(R.id.label_biometric)
-        val biometricSwitch = view.findViewById<SwitchMaterial>(R.id.biometric)
-        val labelBiometricUpgrade = view.findViewById<TextView>(R.id.label_biometric_upgrade)
-        val biometricUpgradeSwitch = view.findViewById<SwitchMaterial>(R.id.biometric_upgrade)
-        val blockedView = view.findViewById<TextView>(R.id.blocked)
-        val deleteButton = view.findViewById<Button>(R.id.button_delete)
+        binding = FragmentIdentityDetailBinding.bind(view)
 
         fun updateUI(item: org.tiqr.data.model.IdentityWithProvider) {
-            titleView.text = item.identityProvider.displayName
-            subtitleView.text = item.identityProvider.identifier
-            logoView.loadImage(item.identityProvider.logo)
-            nameView.text = item.identity.displayName
-            idView.text = item.identity.identifier
-            infoView.linkifyWebWith(item.identityProvider.infoUrl)
+            binding.title.text = item.identityProvider.displayName
+            binding.subtitle.text = item.identityProvider.identifier
+            binding.logo.loadImage(item.identityProvider.logo)
+            binding.name.text = item.identity.displayName
+            binding.id.text = item.identity.identifier
+            binding.info.linkifyWebWith(item.identityProvider.infoUrl)
 
             val hasBiometric = requireContext().biometricUsable()
             val hasBiometricSecret = viewModel.hasBiometricSecret(item.identity)
 
             val showBiometricUsage = hasBiometric && (item.identity.biometricInUse || hasBiometricSecret)
-            labelBiometric.showIf(showBiometricUsage)
-            biometricSwitch.showIf(showBiometricUsage)
-            biometricSwitch.isChecked = item.identity.biometricInUse
+            binding.labelBiometric.showIf(showBiometricUsage)
+            binding.biometric.showIf(showBiometricUsage)
+            binding.biometric.isChecked = item.identity.biometricInUse
 
             val showBiometricUpgrade = hasBiometric && !item.identity.biometricInUse && !hasBiometricSecret
-            labelBiometricUpgrade.showIf(showBiometricUpgrade)
-            biometricUpgradeSwitch.showIf(showBiometricUpgrade)
-            biometricUpgradeSwitch.isChecked = item.identity.biometricOfferUpgrade
+            binding.labelBiometricUpgrade.showIf(showBiometricUpgrade)
+            binding.biometricUpgrade.showIf(showBiometricUpgrade)
+            binding.biometricUpgrade.isChecked = item.identity.biometricOfferUpgrade
 
-            blockedView.showIf(item.identity.blocked)
+            binding.blocked.showIf(item.identity.blocked)
         }
 
         updateUI(args.identity)
@@ -110,19 +97,19 @@ class IdentityDetailFragment : BaseFragment() {
             } ?: findNavController().popBackStack()
         }
 
-        biometricSwitch.setOnCheckedChangeListener { toggle, isChecked ->
+        binding.biometric.setOnCheckedChangeListener { toggle, isChecked ->
             if (toggle.isPressed) {
                 viewModel.useBiometric(args.identity.identity, isChecked)
             }
         }
 
-        biometricUpgradeSwitch.setOnCheckedChangeListener { toggle, isChecked ->
+        binding.biometricUpgrade.setOnCheckedChangeListener { toggle, isChecked ->
             if (toggle.isPressed) {
                 viewModel.upgradeToBiometric(args.identity.identity, isChecked)
             }
         }
 
-        deleteButton.setOnClickListener {
+        binding.buttonDelete.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.identity_delete_title)
                 .setMessage(R.string.identity_delete_message)
                 .setNegativeButton(R.string.button_cancel) { dialog, _ -> dialog.dismiss() }

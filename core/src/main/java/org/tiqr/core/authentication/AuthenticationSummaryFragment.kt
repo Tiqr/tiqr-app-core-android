@@ -31,8 +31,6 @@ package org.tiqr.core.authentication
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
@@ -40,6 +38,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
+import org.tiqr.core.databinding.FragmentAuthenticationSummaryBinding
 import org.tiqr.data.util.extension.biometricUsable
 import org.tiqr.data.viewmodel.AuthenticationViewModel
 import kotlin.system.exitProcess
@@ -52,26 +51,23 @@ class AuthenticationSummaryFragment : BaseFragment() {
     private val args by navArgs<AuthenticationSummaryFragmentArgs>()
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
 
+    private lateinit var binding: FragmentAuthenticationSummaryBinding
+
     @LayoutRes
     override val layout = R.layout.fragment_authentication_summary
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val name: TextView = view.findViewById(R.id.name)
-        val id: TextView = view.findViewById(R.id.id)
-        val serviceProviderName: TextView = view.findViewById(R.id.service_provider_name)
-        val serviceProviderIdentifier: TextView = view.findViewById(R.id.service_provider_identifier)
-        val buttonOk: Button = view.findViewById(R.id.button_ok)
+        binding = FragmentAuthenticationSummaryBinding.bind(view)
 
         viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
-            name.text = challenge?.identity?.displayName
-            id.text = challenge?.identity?.identifier
-            serviceProviderName.text = challenge?.serviceProviderDisplayName
-            serviceProviderIdentifier.text = challenge?.serviceProviderIdentifier
+            binding.name.text = challenge?.identity?.displayName
+            binding.id.text = challenge?.identity?.identifier
+            binding.serviceProviderName.text = challenge?.serviceProviderDisplayName
+            binding.serviceProviderIdentifier.text = challenge?.serviceProviderIdentifier
         }
 
-        buttonOk.setOnClickListener {
+        binding.buttonOk.setOnClickListener {
             requireActivity().finishAffinity()
             exitProcess(0)
         }

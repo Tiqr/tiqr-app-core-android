@@ -34,6 +34,7 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
+import org.tiqr.core.databinding.FragmentAboutBinding
 import org.tiqr.core.util.Urls
 import org.tiqr.core.util.databinding.appName
 import org.tiqr.core.util.databinding.openBrowser
@@ -44,14 +45,16 @@ import org.tiqr.core.util.databinding.openBrowser
 class AboutFragment : BaseFragment() {
     @LayoutRes
     override val layout = R.layout.fragment_about
+    private lateinit var binding: FragmentAboutBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAboutBinding.bind(view)
 
-        view.findViewById<View>(R.id.app).openBrowser(getString(R.string.app_url))
-        view.findViewById<android.widget.TextView>(R.id.app_version_text).appName(getString(R.string.app_name))
-        view.findViewById<View>(R.id.provider).openBrowser(Urls.URL_SURFNET)
-        view.findViewById<View>(R.id.developer).openBrowser(Urls.URL_EGENIQ)
-        view.findViewById<View>(R.id.designer).openBrowser(Urls.URL_KEEN)
+        binding.app.openBrowser(getString(R.string.app_url))
+        binding.appVersionText.appName(getString(R.string.app_name))
+        binding.provider.openBrowser(Urls.URL_SURFNET)
+        binding.developer.openBrowser(Urls.URL_EGENIQ)
+        binding.designer.openBrowser(Urls.URL_KEEN)
     }
 }

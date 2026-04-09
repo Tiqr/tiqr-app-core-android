@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseDialogFragment
+import org.tiqr.core.databinding.FragmentAuthenticationIdentityBinding
 import org.tiqr.data.model.Identity
 import org.tiqr.data.model.IdentityProvider
 import org.tiqr.data.viewmodel.AuthenticationViewModel
@@ -53,13 +54,15 @@ class AuthenticationIdentityFragment : BaseDialogFragment() {
     private val viewModel by hiltNavGraphViewModels<AuthenticationViewModel>(R.id.authentication_nav)
     private val listAdapter = AuthenticationIdentityAdapter(::onItemClick)
 
+    private lateinit var binding: FragmentAuthenticationIdentityBinding
+
     override val layout = R.layout.fragment_authentication_identity
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuthenticationIdentityBinding.bind(view)
 
-        val list: RecyclerView = view.findViewById(R.id.list)
-        list.adapter = listAdapter
+        binding.list.adapter = listAdapter
 
         viewModel.challenge.observe(viewLifecycleOwner) {
             listAdapter.submitList(it.identities)

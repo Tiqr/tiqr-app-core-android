@@ -36,11 +36,10 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import dagger.hilt.android.AndroidEntryPoint
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
-import org.tiqr.core.widget.PinView
+import org.tiqr.core.databinding.FragmentEnrollmentPinVerifyBinding
 import org.tiqr.data.model.ChallengeCompleteResult
 import org.tiqr.data.model.EnrollmentCompleteFailure
 import org.tiqr.data.util.extension.biometricUsable
@@ -55,32 +54,32 @@ class EnrollmentPinVerifyFragment : BaseFragment() {
     private val viewModel by hiltNavGraphViewModels<EnrollmentViewModel>(R.id.enrollment_nav)
     private val args by navArgs<EnrollmentPinVerifyFragmentArgs>()
 
+    private lateinit var binding: FragmentEnrollmentPinVerifyBinding
+
     @LayoutRes
     override val layout = R.layout.fragment_enrollment_pin_verify
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentEnrollmentPinVerifyBinding.bind(view)
 
-        val pinView: PinView = view.findViewById(R.id.pin)
-        val progress: CircularProgressIndicator = view.findViewById(R.id.progress)
-
-        pinView.setConfirmListener { pin ->
+        binding.pin.setConfirmListener { pin ->
             if (pin != args.pin) {
                 MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.enroll_pin_verify_no_match_title)
                     .setMessage(R.string.enroll_pin_verify_no_match_message).setCancelable(false)
                     .setNegativeButton(R.string.button_cancel) { _, _ -> findNavController().popBackStack() }
                     .setPositiveButton(R.string.button_retry) { dialog, _ ->
-                        pinView.clear()
+                        binding.pin.clear()
                         dialog.dismiss()
                     }.show()
             } else {
-                progress.show()
+                binding.progress.show()
                 viewModel.enroll(pin)
             }
         }
 
         viewModel.enrollment.observe(viewLifecycleOwner) {
-            progress.hide()
+            binding.progress.hide()
 
             when (it) {
                 ChallengeCompleteResult.Success -> {
