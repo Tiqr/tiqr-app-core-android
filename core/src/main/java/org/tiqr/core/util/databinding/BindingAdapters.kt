@@ -35,9 +35,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.Spanned
 import android.text.util.Linkify
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -55,13 +53,6 @@ import org.tiqr.core.widget.recyclerview.DividerDecoration
 import org.tiqr.core.widget.recyclerview.HeaderViewDecoration
 import timber.log.Timber
 
-/**
- * Parse the string to html
- */
-
-fun TextView.htmlText(html: String) {
-    text = html.parseAsHtml()
-}
 
 /**
  * Parse the string resource to html

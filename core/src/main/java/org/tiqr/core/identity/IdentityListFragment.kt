@@ -30,6 +30,7 @@
 package org.tiqr.core.identity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
