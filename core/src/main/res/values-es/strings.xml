@@ -71,7 +71,7 @@
 
     <!-- Account -->
     <string name="account_full_name">Nombre y apellidos</string>
-    <string name="account_id">Identificador</string>
+    <string name="account_id">ID</string>
     <string name="account_information">Información</string>
     <string name="account_activated">¡Cuenta activada!</string>
     <string name="account_upgrade_biometric_title">Actualizar cuent</string>
@@ -79,6 +79,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">¿Está seguro que quiere acceder?</string>
+    <string name="auth_confirm_title_with_service">¿Está seguro que quiere acceder:</string>
     <string name="auth_confirm_subtitle">Accederá como:</string>
     <string name="auth_confirm_to">a:</string>
     <string name="auth_confirm_select_identity">Seleccionar identidad</string>

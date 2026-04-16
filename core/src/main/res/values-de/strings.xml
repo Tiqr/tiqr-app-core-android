@@ -79,6 +79,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Möchten Sie sich wirklich anmelden?</string>
+    <string name="auth_confirm_title_with_service">Möchten Sie sich wirklich anmelden:</string>
     <string name="auth_confirm_subtitle">Sie melden sich an als:</string>
     <string name="auth_confirm_to">zu:</string>
     <string name="auth_confirm_select_identity">Identität auswählen</string>

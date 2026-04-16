@@ -79,6 +79,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Sunteti sigur ca vreti sa va autentificati?</string>
+    <string name="auth_confirm_title_with_service">Sunteti sigur ca vreti sa va autentificati:</string>
     <string name="auth_confirm_subtitle">Veti fi autentificat drept:</string>
     <string name="auth_confirm_to">V-ați autentificat pentru domeniul:</string>
     <string name="auth_confirm_select_identity">Selectați identitatea</string>

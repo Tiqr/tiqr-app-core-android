@@ -78,6 +78,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Binne jo wis dat jo ynloche wolle?</string>
+    <string name="auth_confirm_title_with_service">Binne jo wis dat jo ynloche wolle:</string>
     <string name="auth_confirm_subtitle">Jo wurde ynlocht as:</string>
     <string name="auth_confirm_to">foar:</string>
     <string name="auth_confirm_select_identity">Identiteit selektearje</string>
