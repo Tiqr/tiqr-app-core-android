@@ -71,6 +71,7 @@ data class AuthenticationChallenge(
         val identities: List<Identity> = emptyList(),
         val sessionKey: String,
         val challenge: String,
+        val serviceName: String? = null,
         val isStepUpChallenge: Boolean = false,
         val serviceProviderDisplayName: String,
         val serviceProviderIdentifier: String

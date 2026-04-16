@@ -30,13 +30,14 @@ android {
             "tiqr.nl,surfconext.nl,eduid.nl,tiqr.org"
         manifestPlaceholders["tiqr_config_enroll_path_param"] = "tiqrenroll"
         manifestPlaceholders["tiqr_config_auth_path_param"] = "tiqrauth"
+//        manifestPlaceholders["tiqr_config_enroll_path_param"] = "tiqrtestenroll"
+//        manifestPlaceholders["tiqr_config_auth_path_param"] = "tiqrtestauth"
         manifestPlaceholders["tiqr_config_enroll_scheme"] = "tiqrenroll"
         manifestPlaceholders["tiqr_config_auth_scheme"] = "tiqrauth"
         manifestPlaceholders["tiqr_config_token_exchange_enabled"] = "false"
         manifestPlaceholders["tiqr_config_in_app_update_check_enabled"] = "true"
 
-        // only package supported languages
-        resourceConfigurations += listOf(
+        androidResources.localeFilters += listOf(
             "en",
             "da",
             "de",
@@ -52,10 +53,8 @@ android {
             "sk",
             "sl",
             "sr",
-            "tr"
         )
     }
-
     buildTypes {
         release {
             isMinifyEnabled = true

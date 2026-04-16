@@ -67,7 +67,7 @@ abstract class ChallengeRepository<T: Challenge> {
     /**
      * Parse the raw challenge.
      */
-    abstract suspend fun parseChallenge(rawChallenge: String): ChallengeParseResult<T, ChallengeParseFailure>
+    abstract suspend fun parseChallenge(rawChallenge: String, serviceName: String? = null): ChallengeParseResult<T, ChallengeParseFailure>
 
     /**
      * Complete the challenge.

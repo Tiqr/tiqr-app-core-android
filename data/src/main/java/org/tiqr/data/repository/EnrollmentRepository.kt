@@ -45,6 +45,7 @@ import org.tiqr.data.model.Challenge
 import org.tiqr.data.model.ChallengeCompleteFailure
 import org.tiqr.data.model.ChallengeCompleteRequest
 import org.tiqr.data.model.ChallengeCompleteResult
+import org.tiqr.data.model.ChallengeParseFailure
 import org.tiqr.data.model.ChallengeParseResult
 import org.tiqr.data.model.EnrollmentChallenge
 import org.tiqr.data.model.EnrollmentCompleteFailure
@@ -165,7 +166,10 @@ class EnrollmentRepository(
     /**
      * Validate the [rawChallenge] and request enrollment.
      */
-    override suspend fun parseChallenge(rawChallenge: String): ChallengeParseResult<EnrollmentChallenge, EnrollmentParseFailure> =
+    override suspend fun parseChallenge(
+        rawChallenge: String,
+        serviceName: String?
+    ): ChallengeParseResult<EnrollmentChallenge, EnrollmentParseFailure> =
         withContext(dispatcher) {
             // Check challenge validity
             val isValid = isValidChallenge(rawChallenge)

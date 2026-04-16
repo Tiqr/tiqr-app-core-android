@@ -35,6 +35,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.LayoutRes
+import androidx.core.view.isVisible
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,6 +83,12 @@ class AuthenticationConfirmFragment : BaseFragment() {
         binding = FragmentAuthenticationConfirmBinding.bind(view)
 
         viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
+            if(challenge.serviceName!=null){
+                binding.subtitle.isVisible = false
+
+                binding.serviceName.text = getString(R.string.authentication_confirm_service_name, challenge.serviceName)
+            } else {
+            }
             binding.name.text = challenge?.identity?.displayName
             binding.id.text = challenge?.identity?.identifier
             binding.serviceProviderName.text = challenge?.serviceProviderDisplayName
