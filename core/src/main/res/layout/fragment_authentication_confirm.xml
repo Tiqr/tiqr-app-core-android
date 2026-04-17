@@ -16,13 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/show_service_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="subtitle,label_to,service_provider_name,service_provider_identifier" />
-
     <TextView
         android:id="@+id/subtitle"
         android:layout_width="wrap_content"
@@ -157,4 +150,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="@dimen/button_container_height" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/show_service_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="subtitle,label_to,service_provider_name,service_provider_identifier" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

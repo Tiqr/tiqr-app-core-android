@@ -84,10 +84,12 @@ class AuthenticationConfirmFragment : BaseFragment() {
 
         viewModel.challenge.observe(viewLifecycleOwner) { challenge ->
             if(challenge.serviceName!=null){
-                binding.subtitle.isVisible = false
-
-                binding.serviceName.text = getString(R.string.authentication_confirm_service_name, challenge.serviceName)
+                binding.subtitle.text = getString(R.string.auth_confirm_title_with_service)
+                binding.serviceName.text = challenge.serviceName
+                binding.showServiceName.isVisible = false
             } else {
+                binding.showServiceName.isVisible = true
+                binding.serviceName.isVisible = false
             }
             binding.name.text = challenge?.identity?.displayName
             binding.id.text = challenge?.identity?.identifier
