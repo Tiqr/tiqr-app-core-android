@@ -47,6 +47,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.tiqr.core.R
 import org.tiqr.data.repository.NotificationCacheRepository
+import org.tiqr.data.repository.NotificationData
 import org.tiqr.data.repository.base.TokenRegistrarRepository
 import javax.inject.Inject
 
@@ -58,6 +59,7 @@ class TiqrMessagingService : FirebaseMessagingService() {
     companion object {
         private const val MESSAGE_TEXT = "text"
         private const val MESSAGE_CHALLENGE = "challenge"
+        private const val SERVICE_NAME = "serviceName"
         private const val CHANNEL_ID = "default"
     }
 
@@ -90,6 +92,7 @@ class TiqrMessagingService : FirebaseMessagingService() {
         val title = getString(R.string.app_name)
         val text = message.data[MESSAGE_TEXT]
         val challenge = message.data[MESSAGE_CHALLENGE]
+        val serviceName = message.data[SERVICE_NAME]
 
         if (!challenge.isNullOrEmpty()) {
             val notificationManager = NotificationManagerCompat.from(this)
@@ -129,7 +132,7 @@ class TiqrMessagingService : FirebaseMessagingService() {
                     val identifier = System.currentTimeMillis().toInt()
                     val authenticationTimeout = message.data["authenticationTimeout"]?.toIntOrNull() ?: 150
                     notificationManager.notify(identifier, this)
-                    notificationCacheRepository.saveLastNotificationData(challenge, authenticationTimeout, identifier)
+                    notificationCacheRepository.saveLastNotificationData(NotificationData(challenge, serviceName), authenticationTimeout, identifier)
                 }
         }
     }

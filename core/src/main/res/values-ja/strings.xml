@@ -76,6 +76,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">本当にログインしますか？</string>
+    <string name="auth_confirm_title_with_service">本当にログインしますか：</string>
     <string name="auth_confirm_subtitle">次のユーザとしてログインします：</string>
     <string name="auth_confirm_to">ログイン先：</string>
     <string name="auth_confirm_select_identity">IDを選択</string>

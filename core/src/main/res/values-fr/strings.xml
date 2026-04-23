@@ -79,6 +79,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Etes-vous certain de vouloir vous connecter?</string>
+    <string name="auth_confirm_title_with_service">Êtes-vous certain de vouloir vous connecter:</string>
     <string name="auth_confirm_subtitle">Vous serez connecté en tant que:</string>
     <string name="auth_confirm_to">vers:</string>
     <string name="auth_confirm_select_identity">Sélectionnez l\'identité</string>

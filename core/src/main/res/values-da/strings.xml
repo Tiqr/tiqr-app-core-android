@@ -67,7 +67,7 @@
 
     <!-- Account -->
     <string name="account_full_name">Fulde navn</string>
-    <string name="account_id">Tiqr konto id</string>
+    <string name="account_id">ID</string>
     <string name="account_information">Oplysninger</string>
     <string name="account_activated">Konto aktiveret!</string>
     <string name="account_upgrade_biometric_title">Opgrader konto</string>
@@ -75,6 +75,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Sikker på du vil logge ind?</string>
+    <string name="auth_confirm_title_with_service">Sikker på du vil logge ind:</string>
     <string name="auth_confirm_subtitle">Du vil blive logget ind som:</string>
     <string name="auth_confirm_to">til:</string>
     <string name="auth_confirm_select_identity">Vælg identitet</string>

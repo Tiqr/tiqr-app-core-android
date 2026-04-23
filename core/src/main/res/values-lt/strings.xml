@@ -67,7 +67,7 @@
 
     <!-- Account -->
     <string name="account_full_name">Vardas Pavardė</string>
-    <string name="account_id">Tiqr paskyros id</string>
+    <string name="account_id">ID</string>
     <string name="account_information">Informacija</string>
     <string name="account_activated">Paskyra aktyvuota!</string>
     <string name="account_upgrade_biometric_title">Naujovinti paskyrą</string>
@@ -75,6 +75,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Ar tikrai norite prisijungti?</string>
+    <string name="auth_confirm_title_with_service">Ar tikrai norite prisijungti:</string>
     <string name="auth_confirm_subtitle">Jūs būsite prisijungęs kaip:</string>
     <string name="auth_confirm_to">iki:</string>
     <string name="auth_confirm_select_identity">Pasirinkite tapatybę</string>

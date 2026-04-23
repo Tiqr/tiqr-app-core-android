@@ -76,7 +76,7 @@
 
     <!-- Account -->
     <string name="account_full_name">Full name</string>
-    <string name="account_id">Tiqr account id</string>
+    <string name="account_id">ID</string>
     <string name="account_information">Information</string>
     <string name="account_activated">Account activated!</string>
     <string name="account_upgrade_biometric_title">Upgrade account</string>
@@ -84,10 +84,11 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Are you sure you want to log in?</string>
+    <string name="auth_confirm_title_with_service">Are you sure you want to log on:</string>
     <string name="auth_confirm_subtitle">You will be logged in as:</string>
     <string name="auth_confirm_to">to:</string>
     <string name="auth_confirm_select_identity">Select identity</string>
-a
+
     <!-- Authentication (Biometric) -->
     <string name="auth_biometric_title">Use your biometric</string>
 

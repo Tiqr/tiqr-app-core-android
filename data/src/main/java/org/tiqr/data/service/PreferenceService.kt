@@ -53,6 +53,7 @@ class PreferenceService(private val context: Context) {
         private const val PREFS_KEY_LAST_NOTIFICATION_ID = "last_notification_id"
         private const val PREFS_KEY_LAST_NOTIFICATION_TIMEOUT_EPOCH = "last_notification_timeout_epoch"
         private const val PREFS_KEY_LAST_NOTIFICATION_CHALLENGE = "last_notification_challenge"
+        private const val PREFS_KEY_LAST_NOTIFICATION_SERVICE_NAME = "last_notification_service_name"
         private const val PREFS_KEY_SALT = "salt"
         private const val PREFS_KEY_DEVICE_KEY = "device_key"
         private const val PREFS_KEY_NOTIFICATION_TOKEN_MIGRATION_EXECUTED = "notification_token_migration_executed"
@@ -114,6 +115,20 @@ class PreferenceService(private val context: Context) {
                     putString(PREFS_KEY_LAST_NOTIFICATION_CHALLENGE, value)
                 } else {
                     remove(PREFS_KEY_LAST_NOTIFICATION_CHALLENGE)
+                }
+            }
+        }
+
+    var lastNotificationServiceName: String?
+        get() {
+            return notificationSharedPreferences.getString(PREFS_KEY_LAST_NOTIFICATION_SERVICE_NAME, null)
+        }
+        set(value) {
+            notificationSharedPreferences.edit {
+                if (value != null) {
+                    putString(PREFS_KEY_LAST_NOTIFICATION_SERVICE_NAME, value)
+                } else {
+                    remove(PREFS_KEY_LAST_NOTIFICATION_SERVICE_NAME)
                 }
             }
         }

@@ -67,7 +67,7 @@
 
     <!-- Account -->
     <string name="account_full_name">Tam adınız</string>
-    <string name="account_id">Tiqr hesap kimliği</string>
+    <string name="account_id">ID</string>
     <string name="account_information">Bilgi</string>
     <string name="account_activated">Hesap etkinleştirildi!</string>
     <string name="account_upgrade_biometric_title">Hesabınızı yükseltin</string>
@@ -75,6 +75,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Giriş yapmak istediğinizden emin misiniz?</string>
+    <string name="auth_confirm_title_with_service">Giriş yapmak istediğinizden emin misiniz:</string>
     <string name="auth_confirm_subtitle">Şu şekilde giriş yapacaksınız:</string>
     <string name="auth_confirm_to">Sağlayıcı:</string>
     <string name="auth_confirm_select_identity">Kimlik seçin</string>

@@ -70,7 +70,7 @@
 
     <!-- Account -->
     <string name="account_full_name">Puno ime</string>
-    <string name="account_id">Identifikator</string>
+    <string name="account_id">ID</string>
     <string name="account_information">Informacije</string>
     <string name="account_activated">Korisnički račun je aktiviran!</string>
     <string name="account_upgrade_biometric_title">Nadogradite račun</string>
@@ -78,6 +78,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Jeste li sigurni da se želite prijaviti?</string>
+    <string name="auth_confirm_title_with_service">Jeste li sigurni da se želite prijaviti:</string>
     <string name="auth_confirm_subtitle">Bit ćete prijavljeni kao:</string>
     <string name="auth_confirm_to">za:</string>
     <string name="auth_confirm_select_identity">Odaberite identitet</string>

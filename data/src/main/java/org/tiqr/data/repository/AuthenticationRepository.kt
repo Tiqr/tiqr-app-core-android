@@ -97,7 +97,7 @@ class AuthenticationRepository(
     /**
      * Validate the [rawChallenge] and request authentication.
      */
-    override suspend fun parseChallenge(rawChallenge: String): ChallengeParseResult<AuthenticationChallenge, AuthenticationParseFailure> =
+    override suspend fun parseChallenge(rawChallenge: String, serviceName: String?): ChallengeParseResult<AuthenticationChallenge, AuthenticationParseFailure> =
         withContext(dispatcher) {
             // Parse challenge, throw error if not valid
             val challengeUrlParams = AuthenticationUrlParams.parseFromUrl(rawChallenge)
@@ -164,6 +164,7 @@ class AuthenticationRepository(
                 returnUrl = challengeUrlParams.returnUrl,
                 sessionKey = challengeUrlParams.sessionKey,
                 challenge = challengeUrlParams.challenge,
+                serviceName = serviceName,
                 isStepUpChallenge = !(challengeUrlParams.username.isNullOrBlank()), // what does this mean? to be used to check if raw-challenge already has an identity
                 serviceProviderDisplayName = identityProvider.displayName,
                 serviceProviderIdentifier = ""

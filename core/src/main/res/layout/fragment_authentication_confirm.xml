@@ -24,6 +24,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
+    <TextView
+        android:id="@+id/service_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="service name goes here"
+        android:gravity="center"
+        android:visibility="visible"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/table"
         android:layout_width="0dp"
@@ -31,7 +42,7 @@
         android:layout_marginTop="@dimen/authentication_confirm_table_margin_top"
         android:layout_marginBottom="@dimen/authentication_confirm_table_margin_bottom"
         android:orientation="horizontal"
-        app:constraint_referenced_ids="label_name, name, label_id, id, spacer, label_to, service_provider_name, service_provider_identifier"
+        app:constraint_referenced_ids="label_name, name, label_id, id, label_to, service_provider_name, service_provider_identifier"
         app:flow_horizontalGap="4dp"
         app:flow_horizontalStyle="spread_inside"
         app:flow_maxElementsWrap="2"
@@ -49,9 +60,9 @@
     <TextView
         android:id="@+id/label_name"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/account_full_name"
-        android:textAppearance="@style/AppTheme.TextAppearance.Label"
+        android:textAppearance="@style/AppTheme.TextAppearance.Title"
         app:layout_constrainedWidth="true"
         app:layout_constraintHeight_default="spread"
         tools:ignore="MissingConstraints" />
@@ -77,12 +88,6 @@
         app:layout_constraintHeight_default="spread"
         tools:ignore="MissingConstraints" />
 
-    <Space
-        android:id="@+id/spacer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/authentication_confirm_table_spacer_height"
-        tools:ignore="MissingConstraints" />
-
     <TextView
         android:id="@+id/id"
         android:layout_width="0dp"
@@ -93,7 +98,6 @@
         app:layout_constraintWidth_default="spread"
         tools:ignore="MissingConstraints,UnusedAttribute"
         tools:text="&lt;identity identifier&gt;" />
-
     <TextView
         android:id="@+id/label_to"
         android:layout_width="match_parent"
@@ -146,4 +150,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="@dimen/button_container_height" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/show_service_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="subtitle,label_to,service_provider_name,service_provider_identifier" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

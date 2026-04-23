@@ -77,6 +77,7 @@
 
     <!-- Authentication (Confirm) -->
     <string name="auth_confirm_title">Se zares želite prijaviti?</string>
+    <string name="auth_confirm_title_with_service">Se zares želite prijaviti:</string>
     <string name="auth_confirm_subtitle">Prijavili se boste kot:</string>
     <string name="auth_confirm_to">za:</string>
     <string name="auth_confirm_select_identity">Izberite identiteto</string>

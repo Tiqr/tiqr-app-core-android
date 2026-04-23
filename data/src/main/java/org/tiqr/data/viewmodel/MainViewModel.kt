@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.tiqr.data.repository.AuthenticationRepository
 import org.tiqr.data.repository.EnrollmentRepository
 import org.tiqr.data.repository.NotificationCacheRepository
+import org.tiqr.data.repository.NotificationData
 import org.tiqr.data.repository.TokenRepository
 import org.tiqr.data.repository.base.TokenRegistrarRepository
 import javax.inject.Inject
@@ -52,13 +53,13 @@ class MainViewModel @Inject constructor(
     private val auth: AuthenticationRepository
 ) : ViewModel() {
 
-    private val rawChallengeObserver = MutableLiveData<String>()
+    private val rawChallengeObserver = MutableLiveData<NotificationData>()
     val didHandleChallenge = MutableLiveData<Boolean>()
     val challenge = rawChallengeObserver.switchMap { rawChallenge ->
         liveData {
             when {
-                enroll.isValidChallenge(rawChallenge) -> enroll.parseChallenge(rawChallenge)
-                auth.isValidChallenge(rawChallenge) -> auth.parseChallenge(rawChallenge)
+                enroll.isValidChallenge(rawChallenge.challenge) -> enroll.parseChallenge(rawChallenge.challenge)
+                auth.isValidChallenge(rawChallenge.challenge) -> auth.parseChallenge(rawChallenge.challenge, rawChallenge.serviceName)
                 else -> null
             }.run {
                 emit(this)
@@ -69,9 +70,9 @@ class MainViewModel @Inject constructor(
     /**
      * Parse the [rawChallenge]
      */
-    fun parseChallenge(rawChallenge: String) {
+    fun parseChallenge(rawChallenge: String, serviceName: String? = null) {
         didHandleChallenge.value = false
-        rawChallengeObserver.value = rawChallenge
+        rawChallengeObserver.value = NotificationData(rawChallenge, serviceName)
     }
 
     /**
@@ -85,7 +86,7 @@ class MainViewModel @Inject constructor(
 
     fun tryCachedNotificationChallenge(context: Context) {
         notificationCacheRepository.getLastNotificationChallenge(context)?.let { notificationChallenge ->
-            parseChallenge(notificationChallenge)
+            parseChallenge(notificationChallenge.challenge, notificationChallenge.serviceName)
         }
     }
 
