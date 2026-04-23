@@ -33,7 +33,7 @@ class NotificationCacheRepository(
         var result: NotificationData? = null
         val challenge = preferenceService.lastNotificationChallenge
         if (Date().time <= timeoutEpoch && challenge !=null) {
-            // Not timed out yet & have non-null challeng
+            // Not timed out yet & have non-null challenge
             result = NotificationData(challenge, preferenceService.lastNotificationServiceName)
             // Remove the local notification
             val notificationId = preferenceService.lastNotificationId
