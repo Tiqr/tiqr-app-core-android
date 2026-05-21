@@ -25,6 +25,10 @@ object InAppUpdatesUtil {
     private const val KEY_TESTING_ENABLED = "testing_enabled"
 
     fun checkForUpdates(activity: ComponentActivity) {
+        if (!GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity)) {
+            Timber.i("Google Play Services not available, skipping in-app update check.")
+            return
+        }
         val appUpdateManager = AppUpdateManagerFactory.create(activity)
         val preferences = activity.getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE)
 
@@ -83,7 +87,7 @@ object InAppUpdatesUtil {
                 )
             }
         }.addOnFailureListener {
-            Timber.e("Failed to check for app update", it)
+            Timber.e(it, "Failed to check for app update")
         }
     }
 

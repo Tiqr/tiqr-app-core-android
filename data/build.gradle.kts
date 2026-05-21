@@ -67,6 +67,7 @@ android {
         implementation(libs.androidx.lifecycle.scope)
         implementation(libs.androidx.appUpdate)
         implementation(libs.google.android.material)
+        implementation(libs.google.play.services.base)
         implementation(libs.google.guava)
 
 
