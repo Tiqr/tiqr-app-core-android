@@ -61,6 +61,7 @@ import org.tiqr.data.model.ChallengeParseResult
 import org.tiqr.data.model.EnrollmentChallenge
 import org.tiqr.data.model.TiqrConfig
 import org.tiqr.data.scan.ScanKeyEventsReceiver
+import org.tiqr.data.util.GooglePlayServicesUtil
 import org.tiqr.data.util.InAppUpdatesUtil
 import org.tiqr.data.viewmodel.MainViewModel
 import timber.log.Timber
@@ -135,7 +136,7 @@ open class MainActivity : BaseActivity(),
             }
             mainViewModel.didHandleChallenge.value = true
         }
-        if (TiqrConfig.inAppUpdateCheckEnabled) {
+        if (TiqrConfig.inAppUpdateCheckEnabled && GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
             InAppUpdatesUtil.checkForUpdates(this)
             binding.topBarIcon.setOnClickListener(object: OnClickListener {
                 var clickTimes = 0
@@ -245,6 +246,10 @@ open class MainActivity : BaseActivity(),
      * Get the current device token from Firebase messaging
      */
     private suspend inline fun getDeviceToken(): String? {
+        if (!GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+            Timber.i("Google Play Services not available, skipping Firebase device token fetch.")
+            return null
+        }
         return try {
             FirebaseMessaging.getInstance().token.await()
         } catch (ex: Exception) {
