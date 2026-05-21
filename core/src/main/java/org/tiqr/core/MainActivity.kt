@@ -98,7 +98,9 @@ open class MainActivity : BaseActivity(),
 
             Navigation.setViewNavController(binding.bottombar, this)
         }
-        mainViewModel.executeTokenMigrationIfNeeded { getDeviceToken() }
+        if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+            mainViewModel.executeTokenMigrationIfNeeded { getDeviceToken() }
+        }
         mainViewModel.challenge.observe(this) { result ->
             if (mainViewModel.didHandleChallenge.value == true) {
                 // Already handled, probably due to configuration change
