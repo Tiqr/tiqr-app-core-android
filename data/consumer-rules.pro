@@ -80,3 +80,11 @@
 
 # These are app specific sealed classes that are wrapping the ApiResponse
 #-keep,allowobfuscation,allowshrinking class org.tiqr.data.api.response.ApiResponse
+
+# ML Kit
+-keep class com.google.mlkit.** { *; }
+-keep interface com.google.mlkit.** { *; }
+-keep class com.google.mlkit.common.internal.CommonComponentRegistrar {
+    public <init>();
+}
+-keep class com.google.firebase.components.ComponentRegistrar
