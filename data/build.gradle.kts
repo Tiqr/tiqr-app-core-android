@@ -81,6 +81,7 @@ android {
         api(libs.androidx.camera.camera2)
         api(libs.androidx.concurrent)
         api(libs.google.mlkit.barcode)
+        api(libs.google.mlkit.common)
         api(libs.kotlinx.coroutines.playServices)
         api(libs.okhttp.okhttp)
         api(libs.okhttp.logging)
