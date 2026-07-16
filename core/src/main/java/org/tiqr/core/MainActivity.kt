@@ -38,6 +38,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat.enableEdgeToEdge
 import androidx.core.view.children
@@ -51,7 +52,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.tasks.await
-import org.tiqr.core.base.BaseActivity
 import org.tiqr.core.databinding.ActivityMainBinding
 import org.tiqr.core.scan.ScanFragment
 import org.tiqr.core.util.extensions.currentNavigationFragment
@@ -67,7 +67,7 @@ import org.tiqr.data.viewmodel.MainViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-open class MainActivity : BaseActivity(),
+open class MainActivity : AppCompatActivity(),
     NavController.OnDestinationChangedListener {
 
     private val mainViewModel by viewModels<MainViewModel>()
@@ -75,13 +75,14 @@ open class MainActivity : BaseActivity(),
     private lateinit var binding: ActivityMainBinding
 
     @LayoutRes
-    override val layout = R.layout.activity_main
+    val layout = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         installSplashScreen()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         enableEdgeToEdge(window)
 
         navController = getNavController(R.id.nav_host_fragment).apply {
