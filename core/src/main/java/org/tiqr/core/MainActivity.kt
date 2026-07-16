@@ -37,7 +37,6 @@ import android.view.View.OnClickListener
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat.enableEdgeToEdge
@@ -73,9 +72,6 @@ open class MainActivity : AppCompatActivity(),
     private val mainViewModel by viewModels<MainViewModel>()
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
-
-    @LayoutRes
-    val layout = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
