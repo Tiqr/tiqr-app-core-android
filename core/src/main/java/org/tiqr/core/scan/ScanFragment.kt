@@ -38,7 +38,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import org.tiqr.core.R
 import org.tiqr.core.base.BaseFragment
 import org.tiqr.core.databinding.FragmentScanBinding
@@ -85,7 +84,6 @@ class ScanFragment : BaseFragment() {
         when (result) {
             is ChallengeParseResult.Success -> {
                 viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                    delay(200L) // delay a bit, otherwise beep sound is cutoff
                     val navController: NavController
                     try {
                         navController = findNavController()
