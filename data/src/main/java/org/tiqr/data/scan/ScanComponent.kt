@@ -30,9 +30,7 @@
 package org.tiqr.data.scan
 
 import android.content.Context
-import android.media.AudioAttributes
 import android.media.AudioManager
-import android.media.SoundPool
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -56,7 +54,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.tiqr.data.R
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -72,7 +69,6 @@ class ScanComponent(
     private val scanResult: (result: String) -> Unit,
 ) : DefaultLifecycleObserver {
     companion object {
-        private const val BEEP_VOLUME = 0.1f
         private const val VIBRATE_DURATION = 200L
     }
 
@@ -87,20 +83,9 @@ class ScanComponent(
     private val cameraAnalyzer = ScanAnalyzer(lifecycleOwner, ::onDetected)
     //endregion
 
-    //region Sound
-    private val soundPool: SoundPool = SoundPool.Builder()
-        .setMaxStreams(1)
-        .setAudioAttributes(
-            AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                .build()
-        )
-        .build()
-    private val beepSound: Int = soundPool.load(context, R.raw.beep, 1)
     private val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     private val audioManager: AudioManager =
         context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    //endregion
 
     private val lifecycleScope = lifecycleOwner.lifecycleScope
 
@@ -203,13 +188,9 @@ class ScanComponent(
     }
 
     /**
-     * Beep and vibrate to notify the user.
+     * Vibrate to notify the user.
      */
     private fun alertDetection() {
-        fun beep() {
-            soundPool.play(beepSound, BEEP_VOLUME, BEEP_VOLUME, 1, 0, 1f)
-        }
-
         fun vibrate() {
             if (vibrator.hasVibrator()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -227,21 +208,8 @@ class ScanComponent(
         }
 
         // Try to respect user settings for silencing
-        when (audioManager.ringerMode) {
-            AudioManager.RINGER_MODE_NORMAL -> {
-                // Beep and vibrate
-                beep()
-                vibrate()
-            }
-
-            AudioManager.RINGER_MODE_VIBRATE -> {
-                // No beep, only vibrate
-                vibrate()
-            }
-
-            AudioManager.RINGER_MODE_SILENT -> {
-                // No beep nor vibrate
-            }
+        if (audioManager.ringerMode != AudioManager.RINGER_MODE_SILENT) {
+            vibrate()
         }
     }
 
@@ -259,8 +227,6 @@ class ScanComponent(
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-
-        soundPool.release()
     }
 }
 
